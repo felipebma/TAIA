@@ -5,24 +5,24 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-class Cromossomo {
+class Chromosome implements Comparable<Chromosome>{
 
     Random rnd = new Random();
     int[] queens;
     int fitness;
 
-    public Cromossomo() {
+    public Chromosome() {
         queens = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
         shuffle(queens);
         fitness();
     }
 
-    public Cromossomo(int[] arr) {
+    public Chromosome(int[] arr) {
         queens = Arrays.copyOf(arr, arr.length);
         fitness();
     }
 
-    public Cromossomo cutAndCrossfill(Cromossomo other, int begin, int end) {
+    public Chromosome cutAndCrossfill(Chromosome other, int begin, int end) {
         int[] newChild = new int[8];
         Set<Integer> used = new HashSet<>();
         for (int i = begin; i < end; i++) {
@@ -38,10 +38,10 @@ class Cromossomo {
             }
             j = (j + 1) % 8;
         }
-        return new Cromossomo(newChild);
+        return new Chromosome(newChild);
     }
 
-    public Cromossomo cutAndCrossfill(Cromossomo other, int end) {
+    public Chromosome cutAndCrossfill(Chromosome other, int end) {
         return cutAndCrossfill(other, 0, end);
     }
 
@@ -85,5 +85,10 @@ class Cromossomo {
     @Override
     public String toString() {
         return String.format("Queens Positions: %s Fitness: %d", Arrays.toString(this.queens), this.fitness);
+    }
+
+    @Override
+    public int compareTo(Chromosome o) {
+        return o.fitness - fitness;
     }
 }

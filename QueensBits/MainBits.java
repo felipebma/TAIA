@@ -1,12 +1,12 @@
-package Queens;
+package QueensBits;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class Main {
-
+public class MainBits {
     private static final Random rnd = new Random();
     private static final int populationSize = 100;
     private static int fitnessCounter = populationSize;
@@ -15,15 +15,15 @@ public class Main {
     private static final double mutationProbability = 0.4;
 
     public static void main(String[] args) {
-        List<Chromosome> chromosomes = generatePopulation(populationSize);
+        List<ChromosomesBits> chromosomes = generatePopulation(populationSize);
         Collections.sort(chromosomes);
         int numberOfGenerations = 1;
         while (chromosomes.get(0).fitness < 8 && fitnessCounter < fitnessCounterLimit) {
             System.out.println("Best permutation: " + chromosomes.get(0));
-            List<Chromosome> parents = getParents(chromosomes);
-            List<Chromosome> children = generateChildren(parents);
+            List<ChromosomesBits> parents = getParents(chromosomes);
+            List<ChromosomesBits> children = generateChildren(parents);
             fitnessCounter += 2;
-            for (Chromosome c : chromosomes) {
+            for (ChromosomesBits c : chromosomes) {
                 if (rnd.nextDouble() < mutationProbability) {
                     c.mutation();
                     fitnessCounter++;
@@ -40,30 +40,30 @@ public class Main {
         System.out.println("Number of generations: " + numberOfGenerations);
     }
 
-    private static List<Chromosome> generatePopulation(int populationSize) {
-        List<Chromosome> population = new ArrayList<>();
+    private static List<ChromosomesBits> generatePopulation(int populationSize) {
+        List<ChromosomesBits> population = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
-            population.add(new Chromosome());
+            population.add(new ChromosomesBits());
         }
         return population;
     }
 
-    private static List<Chromosome> getParents(List<Chromosome> population) {
+    private static List<ChromosomesBits> getParents(List<ChromosomesBits> population) {
         Collections.shuffle(population, rnd);
-        List<Chromosome> randomFive = population.subList(0, 5);
+        List<ChromosomesBits> randomFive = population.subList(0, 5);
         Collections.sort(randomFive);
         return randomFive.subList(0, 2);
     }
 
-    private static List<Chromosome> generateChildren(List<Chromosome> parents) {
+    private static List<ChromosomesBits> generateChildren(List<ChromosomesBits> parents) {
         int splitPos = rnd.nextInt(6) + 1;
-        List<Chromosome> children = new ArrayList<>();
+        List<ChromosomesBits> children = new ArrayList<>();
         if (rnd.nextDouble() < recombinationProbability) {
             children.add(parents.get(0).cutAndCrossfill(parents.get(1), splitPos));
             children.add(parents.get(1).cutAndCrossfill(parents.get(0), splitPos));
         } else {
-            children.add(new Chromosome(parents.get(0).queens));
-            children.add(new Chromosome(parents.get(1).queens));
+            children.add(new ChromosomesBits(parents.get(0).queens));
+            children.add(new ChromosomesBits(parents.get(1).queens));
         }
         return children;
     }
