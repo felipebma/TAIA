@@ -13,20 +13,31 @@ public class Main {
 
     public static void main(String[] args) {
         runDefault();
+        runAlternativeFitness();
     }
 
     private static void runDefault() {
+        runTest(new TestConfig("default", 100, (int) 1e4, 0.6, 0.4, FitnessStrategy.normalStrategy));
+    }
+
+    private static void runAlternativeFitness() {
+        runTest(new TestConfig("alternativeFitness", 100, (int) 1e4, 0.6, 0.4, FitnessStrategy.alternativeStrategy));
+    }
+
+    private static void runTest(TestConfig config) {
         try {
-            File file = new File("../data/default.out");
+            File file = new File(String.format("../data/%s.out", config.fileName));
             file.createNewFile();
             FileWriter fr = new FileWriter(file, false);
             fr.write("Best_Fitness,Generations_Count,Converged_Count");
             for (int i = 0; i < 30; i++)
-                fr.write("\n" + run(100, (int) 1e4, 0.6, 0.4, FitnessStrategy.normalStrategy));
+                fr.write("\n" + run(config.populationSize, config.fitnessCounterLimit, config.recombinationProbability,
+                        config.mutationProbability, config.fitnessStrategy));
             fr.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     private static String run(int populationSize, int fitnessCounterLimit, double recombinationProbability,
