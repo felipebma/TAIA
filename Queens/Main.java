@@ -18,8 +18,8 @@ public class Main {
         List<Chromosome> chromosomes = generatePopulation(populationSize);
         Collections.sort(chromosomes);
         int numberOfGenerations = 1;
-        while (chromosomes.get(0).fitness < 8 && fitnessCounter < fitnessCounterLimit) {
-            System.out.println("Best permutation: " + chromosomes.get(0));
+        while (chromosomes.get(0).getFitness() < 8 && fitnessCounter < fitnessCounterLimit) {
+            System.out.println("Best permutation:\n" + chromosomes.get(0));
             List<Chromosome> parents = getParents(chromosomes);
             List<Chromosome> children = generateChildren(parents);
             fitnessCounter += 2;
@@ -36,14 +36,14 @@ public class Main {
             Collections.sort(chromosomes);
             numberOfGenerations++;
         }
-        System.out.println("Best permutation: " + chromosomes.get(0));
+        System.out.println("Best permutation:\n" + chromosomes.get(0));
         System.out.println("Number of generations: " + numberOfGenerations);
     }
 
     private static List<Chromosome> generatePopulation(int populationSize) {
         List<Chromosome> population = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
-            population.add(new Chromosome());
+            population.add(new ChromosomeArr());
         }
         return population;
     }
@@ -62,8 +62,8 @@ public class Main {
             children.add(parents.get(0).cutAndCrossfill(parents.get(1), splitPos));
             children.add(parents.get(1).cutAndCrossfill(parents.get(0), splitPos));
         } else {
-            children.add(new Chromosome(parents.get(0).queens));
-            children.add(new Chromosome(parents.get(1).queens));
+            children.add(new ChromosomeArr(parents.get(0).getBitRepresentation()));
+            children.add(new ChromosomeArr(parents.get(1).getBitRepresentation()));
         }
         return children;
     }
