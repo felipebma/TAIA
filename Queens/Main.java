@@ -1,5 +1,7 @@
 package Queens;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +17,17 @@ public class Main {
     }
 
     private static void runDefault() {
-        System.out.println(run(30, (int) 1e4, 0.6, 0.4));
+        try {
+            File file = new File("../data/default.out");
+            file.createNewFile();
+            FileWriter fr = new FileWriter(file, false);
+            fr.write("Best_Fitness,Generations_Count,Converged_Count");
+            for (int i = 0; i < 30; i++)
+                fr.write("\n" + run(100, (int) 1e4, 0.6, 0.4));
+            fr.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static String run(int populationSize, int fitnessCounterLimit, double recombinationProbability,
@@ -38,7 +50,7 @@ public class Main {
             Collections.sort(chromosomes);
             numberOfGenerations++;
         }
-        return formatData(chromosomes, numberOfGenerations);
+        return new TestData(chromosomes, numberOfGenerations).toString();
     }
 
     private static void insertChildren(List<Chromosome> chromosomes, List<Chromosome> children) {
@@ -46,15 +58,6 @@ public class Main {
         chromosomes.remove(chromosomes.size() - 1);
         chromosomes.remove(chromosomes.size() - 1);
         chromosomes.addAll(children);
-    }
-
-    private static String formatData(List<Chromosome> chromosomes, int numberOfGenerations) {
-        StringJoiner joiner = new StringJoiner("\n");
-        joiner.add("Best permutation:\n" + chromosomes.get(0));
-        joiner.add("Number of Generations: " + numberOfGenerations);
-        long count = chromosomes.stream().filter(c -> c.getFitness() == 8).count();
-        joiner.add("Convergiu para: " + count);
-        return joiner.toString();
     }
 
     private static List<Chromosome> generatePopulation(int populationSize) {
