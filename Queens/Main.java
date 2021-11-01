@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.StringJoiner;
 
 public class Main {
 
@@ -23,7 +22,7 @@ public class Main {
             FileWriter fr = new FileWriter(file, false);
             fr.write("Best_Fitness,Generations_Count,Converged_Count");
             for (int i = 0; i < 30; i++)
-                fr.write("\n" + run(100, (int) 1e4, 0.6, 0.4));
+                fr.write("\n" + run(100, (int) 1e4, 0.6, 0.4, FitnessStrategy.normalStrategy));
             fr.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,14 +30,14 @@ public class Main {
     }
 
     private static String run(int populationSize, int fitnessCounterLimit, double recombinationProbability,
-            double mutationProbability) {
-        List<Chromosome> chromosomes = generatePopulation(populationSize);
+            double mutationProbability, FitnessStrategy fitnessStrategy) {
+        List<Chromosome> chromosomes = generatePopulation(populationSize, fitnessStrategy);
         int fitnessCounter = populationSize;
         Collections.sort(chromosomes);
         int numberOfGenerations = 1;
-        while (chromosomes.get(0).getFitness() < 8 && fitnessCounter < fitnessCounterLimit) {
+        while (chromosomes.get(0).getFitness() < fitnessStrategy.maxFitness() && fitnessCounter < fitnessCounterLimit) {
             List<Chromosome> parents = getParents(chromosomes);
-            List<Chromosome> children = generateChildren(parents, recombinationProbability);
+            List<Chromosome> children = generateChildren(parents, recombinationProbability, fitnessStrategy);
             fitnessCounter += 2;
             for (Chromosome c : chromosomes) {
                 if (rnd.nextDouble() < mutationProbability) {
@@ -50,7 +49,8 @@ public class Main {
             Collections.sort(chromosomes);
             numberOfGenerations++;
         }
-        return new TestData(chromosomes, numberOfGenerations).toString();
+        System.out.println(chromosomes.get(0));
+        return new TestData(chromosomes, numberOfGenerations, fitnessStrategy).toString();
     }
 
     private static void insertChildren(List<Chromosome> chromosomes, List<Chromosome> children) {
@@ -60,10 +60,10 @@ public class Main {
         chromosomes.addAll(children);
     }
 
-    private static List<Chromosome> generatePopulation(int populationSize) {
+    private static List<Chromosome> generatePopulation(int populationSize, FitnessStrategy fitnessStrategy) {
         List<Chromosome> population = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
-            population.add(new ChromosomeArr());
+            population.add(new ChromosomeArr(fitnessStrategy));
         }
         return population;
     }
@@ -75,15 +75,16 @@ public class Main {
         return randomFive.subList(0, 2);
     }
 
-    private static List<Chromosome> generateChildren(List<Chromosome> parents, double recombinationProbability) {
+    private static List<Chromosome> generateChildren(List<Chromosome> parents, double recombinationProbability,
+            FitnessStrategy fitnessStrategy) {
         int splitPos = rnd.nextInt(6) + 1;
         List<Chromosome> children = new ArrayList<>();
         if (rnd.nextDouble() < recombinationProbability) {
             children.add(parents.get(0).cutAndCrossfill(parents.get(1), splitPos));
             children.add(parents.get(1).cutAndCrossfill(parents.get(0), splitPos));
         } else {
-            children.add(new ChromosomeArr(parents.get(0).getBitRepresentation()));
-            children.add(new ChromosomeArr(parents.get(1).getBitRepresentation()));
+            children.add(new ChromosomeArr(parents.get(0).getBitRepresentation(), fitnessStrategy));
+            children.add(new ChromosomeArr(parents.get(1).getBitRepresentation(), fitnessStrategy));
         }
         return children;
     }

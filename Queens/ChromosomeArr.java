@@ -10,20 +10,24 @@ class ChromosomeArr implements Chromosome {
     Random rnd = new Random();
     int[] queens;
     int fitness;
+    FitnessStrategy fitnessStrategy;
 
-    public ChromosomeArr() {
+    public ChromosomeArr(FitnessStrategy fitnessStrategy) {
         queens = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
         shuffle(queens);
+        this.fitnessStrategy = fitnessStrategy;
         fitness();
     }
 
-    public ChromosomeArr(int[] arr) {
+    public ChromosomeArr(int[] arr, FitnessStrategy fitnessStrategy) {
         queens = Arrays.copyOf(arr, arr.length);
+        this.fitnessStrategy = fitnessStrategy;
         fitness();
     }
 
-    public ChromosomeArr(String binaryRepresentation) {
+    public ChromosomeArr(String binaryRepresentation, FitnessStrategy fitnessStrategy) {
         queens = binaryToArr(binaryRepresentation);
+        this.fitnessStrategy = fitnessStrategy;
         fitness();
     }
 
@@ -45,7 +49,7 @@ class ChromosomeArr implements Chromosome {
             }
             j = (j + 1) % 8;
         }
-        return new ChromosomeArr(newChild);
+        return new ChromosomeArr(newChild, this.fitnessStrategy);
     }
 
     @Override
@@ -63,18 +67,7 @@ class ChromosomeArr implements Chromosome {
     }
 
     private void fitness() {
-        fitness = 8;
-        for (int i = 0; i < 8; i++) {
-            int count = 0;
-            for (int j = 0; j < 8; j++) {
-                if (Math.abs(queens[i] - queens[j]) == Math.abs(i - j)) {
-                    count++;
-                }
-            }
-            if (count > 1) {
-                fitness--;
-            }
-        }
+        this.fitness = this.fitnessStrategy.calculateFitness(queens);
     }
 
     private void shuffle(int[] arr) {
