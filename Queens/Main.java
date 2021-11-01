@@ -4,24 +4,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.StringJoiner;
 
 public class Main {
 
     private static final Random rnd = new Random();
-    private static final int populationSize = 100;
-    private static int fitnessCounter = populationSize;
-    private static final int fitnessCounterLimit = (int) 1e4;
-    private static final double recombinationProbability = 0.6;
-    private static final double mutationProbability = 0.4;
 
     public static void main(String[] args) {
+        runDefault();
+    }
+
+    private static void runDefault() {
+        System.out.println(run(100, (int) 1e4, 0.6, 0.4));
+    }
+
+    private static String run(int populationSize, int fitnessCounterLimit, double recombinationProbability,
+            double mutationProbability) {
         List<Chromosome> chromosomes = generatePopulation(populationSize);
+        int fitnessCounter = populationSize;
         Collections.sort(chromosomes);
         int numberOfGenerations = 1;
         while (chromosomes.get(0).getFitness() < 8 && fitnessCounter < fitnessCounterLimit) {
-            System.out.println("Best permutation:\n" + chromosomes.get(0));
+            // System.out.println("Best permutation:\n" + chromosomes.get(0));
             List<Chromosome> parents = getParents(chromosomes);
-            List<Chromosome> children = generateChildren(parents);
+            List<Chromosome> children = generateChildren(parents, recombinationProbability);
             fitnessCounter += 2;
             for (Chromosome c : chromosomes) {
                 if (rnd.nextDouble() < mutationProbability) {
@@ -36,8 +42,16 @@ public class Main {
             Collections.sort(chromosomes);
             numberOfGenerations++;
         }
-        System.out.println("Best permutation:\n" + chromosomes.get(0));
-        System.out.println("Number of generations: " + numberOfGenerations);
+        return formatData(chromosomes, numberOfGenerations);
+    }
+
+    private static String formatData(List<Chromosome> chromosomes, int numberOfGenerations) {
+        StringJoiner joiner = new StringJoiner("\n");
+        joiner.add("Best permutation:\n" + chromosomes.get(0));
+        joiner.add("Number of Generations: " + numberOfGenerations);
+        long count = chromosomes.stream().filter(c -> c.getFitness() == 8).count();
+        joiner.add("Convergiu para: " + count);
+        return joiner.toString();
     }
 
     private static List<Chromosome> generatePopulation(int populationSize) {
@@ -55,7 +69,7 @@ public class Main {
         return randomFive.subList(0, 2);
     }
 
-    private static List<Chromosome> generateChildren(List<Chromosome> parents) {
+    private static List<Chromosome> generateChildren(List<Chromosome> parents, double recombinationProbability) {
         int splitPos = rnd.nextInt(6) + 1;
         List<Chromosome> children = new ArrayList<>();
         if (rnd.nextDouble() < recombinationProbability) {
