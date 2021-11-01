@@ -15,7 +15,7 @@ public class Main {
     }
 
     private static void runDefault() {
-        System.out.println(run(100, (int) 1e4, 0.6, 0.4));
+        System.out.println(run(30, (int) 1e4, 0.6, 0.4));
     }
 
     private static String run(int populationSize, int fitnessCounterLimit, double recombinationProbability,
@@ -25,7 +25,6 @@ public class Main {
         Collections.sort(chromosomes);
         int numberOfGenerations = 1;
         while (chromosomes.get(0).getFitness() < 8 && fitnessCounter < fitnessCounterLimit) {
-            // System.out.println("Best permutation:\n" + chromosomes.get(0));
             List<Chromosome> parents = getParents(chromosomes);
             List<Chromosome> children = generateChildren(parents, recombinationProbability);
             fitnessCounter += 2;
@@ -35,14 +34,18 @@ public class Main {
                     fitnessCounter++;
                 }
             }
-            Collections.sort(chromosomes);
-            chromosomes.remove(chromosomes.size() - 1);
-            chromosomes.remove(chromosomes.size() - 1);
-            chromosomes.addAll(children);
+            insertChildren(chromosomes, children);
             Collections.sort(chromosomes);
             numberOfGenerations++;
         }
         return formatData(chromosomes, numberOfGenerations);
+    }
+
+    private static void insertChildren(List<Chromosome> chromosomes, List<Chromosome> children) {
+        Collections.sort(chromosomes);
+        chromosomes.remove(chromosomes.size() - 1);
+        chromosomes.remove(chromosomes.size() - 1);
+        chromosomes.addAll(children);
     }
 
     private static String formatData(List<Chromosome> chromosomes, int numberOfGenerations) {
