@@ -19,7 +19,7 @@ def plotScatter(testName, iterations):
 
 
 def plotHist2d(testName, iterations):
-    print('scatter')
+    print('hist2d')
     for i in range(len(iterations)):
         x_values = iterations[i][0]
         max_y = max(iterations[i][1])
