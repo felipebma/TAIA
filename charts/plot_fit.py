@@ -60,4 +60,4 @@ def plotFit(testName):
     plotBoxplot(testName, iterations)
 
 
-plotFit('alternativeFitness')
+plotFit('default')
