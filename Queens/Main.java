@@ -16,14 +16,19 @@ public class Main {
     public static void main(String[] args) {
         runDefault();
         runAlternativeFitness();
+        runLowerMutation();
     }
 
     private static void runDefault() {
-        runTest(new TestConfig("default", 100, (int) 1e4, 0.6, 0.4, FitnessStrategy.normalStrategy));
+        runTest(new TestConfig("default", 100, (int) 1e4, 0.9, 0.4, FitnessStrategy.normalStrategy, StopStrategy.runAllGenerations()));
     }
 
     private static void runAlternativeFitness() {
-        runTest(new TestConfig("alternativeFitness", 100, (int) 1e4, 0.6, 0.4, FitnessStrategy.alternativeStrategy));
+        runTest(new TestConfig("alternativeFitness", 100, (int) 1e4, 0.9, 0.4, FitnessStrategy.alternativeStrategy, StopStrategy.runAllGenerations()));
+    }
+
+    private static void runLowerMutation() {
+        runTest(new TestConfig("lowerMutation", 100, (int) 1e4, 0.9, 0.0, FitnessStrategy.alternativeStrategy, StopStrategy.runAllGenerations()));
     }
 
     private static void runTest(TestConfig config) {
@@ -38,7 +43,7 @@ public class Main {
             ow.write("Best_Fitness,Generations_Count,Converged_Count");
             for (int i = 0; i < 30; i++) {
                 TestData testResults = run(config.populationSize, config.fitnessCounterLimit,
-                        config.recombinationProbability, config.mutationProbability, config.fitnessStrategy);
+                        config.recombinationProbability, config.mutationProbability, config.fitnessStrategy, config.stopStrategy);
                 ow.write("\n" + testResults.toString());
                 StringJoiner sj = new StringJoiner("\n");
                 for (List<Integer> fit : testResults.fitnesses) {
@@ -56,14 +61,14 @@ public class Main {
     }
 
     private static TestData run(int populationSize, int fitnessCounterLimit, double recombinationProbability,
-            double mutationProbability, FitnessStrategy fitnessStrategy) {
+            double mutationProbability, FitnessStrategy fitnessStrategy, StopStrategy stopStrategy) {
         List<Chromosome> chromosomes = generatePopulation(populationSize, fitnessStrategy);
         int fitnessCounter = populationSize;
         Collections.sort(chromosomes);
         int numberOfGenerations = 1;
         List<List<Integer>> fitnesses = new ArrayList<>();
         fitnesses.add(chromosomes.stream().map(c -> c.getFitness()).collect(Collectors.toList()));
-        while (chromosomes.get(0).getFitness() < fitnessStrategy.maxFitness() && fitnessCounter < fitnessCounterLimit) {
+        while (!stopStrategy.finished(chromosomes, fitnessStrategy, fitnessCounter, fitnessCounterLimit, numberOfGenerations)) {
             List<Chromosome> parents = getParents(chromosomes);
             List<Chromosome> children = generateChildren(parents, recombinationProbability, fitnessStrategy);
             fitnessCounter += 2;

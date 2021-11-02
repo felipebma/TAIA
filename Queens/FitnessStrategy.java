@@ -38,13 +38,11 @@ public interface FitnessStrategy {
         public int calculateFitness(String queens) {
             int fitness = 28;
             for (int i = 0; i < 8; i++) {
-                int count = 0;
                 for (int j = i + 1; j < 8; j++) {
                     if (Math.abs(getPos(queens, i) - getPos(queens, j)) == Math.abs(i - j)) {
-                        count++;
+                        fitness--;
                     }
                 }
-                fitness -= count;
             }
             return fitness;
         }

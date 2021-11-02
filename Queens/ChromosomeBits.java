@@ -67,21 +67,8 @@ public class ChromosomeBits implements Chromosome {
         fitness();
     }
 
-    private void fitness() {// TODO: make this use fitnessStrategy (maybe reimplement the toInt and
-                            // getThree.. inside FitnessStrategy.java)
-        fitness = 8;
-        for (int i = 0; i < 8; i++) {
-            int count = 0;
-            for (int j = 0; j < 8; j++) {
-                if (Math.abs(toInt(getThreeSizedSubArray(queens, i * 3))
-                        - toInt(getThreeSizedSubArray(queens, j * 3))) == Math.abs(i - j)) {
-                    count++;
-                }
-            }
-            if (count > 1) {
-                fitness--;
-            }
-        }
+    private void fitness() {
+        this.fitness = this.fitnessStrategy.calculateFitness(getBitRepresentation());
     }
 
     private void shuffle(char[] arr) {
