@@ -10,9 +10,12 @@ public class TestData {
     Chromosome bestPermutation;
     int numberOfGenerations;
     FitnessStrategy fitnessStrategy;
+    List<List<Integer>> fitnesses;
 
-    public TestData(List<Chromosome> chromosomes, int numberOfGenerations, FitnessStrategy fitnessStrategy) {
+    public TestData(List<Chromosome> chromosomes, List<List<Integer>> fitnesses, int numberOfGenerations,
+            FitnessStrategy fitnessStrategy) {
         this.chromosomes = chromosomes;
+        this.fitnesses = fitnesses;
         Collections.sort(this.chromosomes);
         this.bestPermutation = chromosomes.get(0);
         this.numberOfGenerations = numberOfGenerations;

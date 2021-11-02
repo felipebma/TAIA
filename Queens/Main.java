@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -26,26 +27,38 @@ public class Main {
 
     private static void runTest(TestConfig config) {
         try {
-            File file = new File(String.format("../data/%s.out", config.fileName));
-            file.createNewFile();
-            FileWriter fr = new FileWriter(file, false);
-            fr.write("Best_Fitness,Generations_Count,Converged_Count");
-            for (int i = 0; i < 30; i++)
-                fr.write("\n" + run(config.populationSize, config.fitnessCounterLimit, config.recombinationProbability,
-                        config.mutationProbability, config.fitnessStrategy));
-            fr.close();
+            File output = new File(String.format("../data/%s.out", config.fileName));
+            File fitnesses = new File(String.format("../data/%s.fit", config.fileName));
+            fitnesses.createNewFile();
+            output.createNewFile();
+            FileWriter ow = new FileWriter(output, false);
+            FileWriter fw = new FileWriter(fitnesses, false);
+            ow.write("Best_Fitness,Generations_Count,Converged_Count");
+            for (int i = 0; i < 30; i++) {
+                TestData testResults = run(config.populationSize, config.fitnessCounterLimit,
+                        config.recombinationProbability, config.mutationProbability, config.fitnessStrategy);
+                ow.write("\n" + testResults.toString());
+                for (List<Integer> fit : testResults.fitnesses) {
+                    fw.write(fit.toString().replace("[", "").replace("]", "") + "\n");
+                }
+                fw.write("\n");
+            }
+            ow.close();
+            fw.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private static String run(int populationSize, int fitnessCounterLimit, double recombinationProbability,
+    private static TestData run(int populationSize, int fitnessCounterLimit, double recombinationProbability,
             double mutationProbability, FitnessStrategy fitnessStrategy) {
         List<Chromosome> chromosomes = generatePopulation(populationSize, fitnessStrategy);
         int fitnessCounter = populationSize;
         Collections.sort(chromosomes);
         int numberOfGenerations = 1;
+        List<List<Integer>> fitnesses = new ArrayList<>();
+        fitnesses.add(chromosomes.stream().map(c -> c.getFitness()).collect(Collectors.toList()));
         while (chromosomes.get(0).getFitness() < fitnessStrategy.maxFitness() && fitnessCounter < fitnessCounterLimit) {
             List<Chromosome> parents = getParents(chromosomes);
             List<Chromosome> children = generateChildren(parents, recombinationProbability, fitnessStrategy);
@@ -59,9 +72,10 @@ public class Main {
             insertChildren(chromosomes, children);
             Collections.sort(chromosomes);
             numberOfGenerations++;
+            fitnesses.add(chromosomes.stream().map(c -> c.getFitness()).collect(Collectors.toList()));
         }
         System.out.println(chromosomes.get(0));
-        return new TestData(chromosomes, numberOfGenerations, fitnessStrategy).toString();
+        return new TestData(chromosomes, fitnesses, numberOfGenerations, fitnessStrategy);
     }
 
     private static void insertChildren(List<Chromosome> chromosomes, List<Chromosome> children) {
