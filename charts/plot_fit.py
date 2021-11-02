@@ -74,8 +74,8 @@ def plotFit(testName):
                     iterations[it][1].append(int(value))
                 count += 1
 
-    # plotScatter(testName, iterations)
-    # plotBoxplot(testName, iterations)
+    plotScatter(testName, iterations)
+    plotBoxplot(testName, iterations)
     plotHist2d(testName, iterations)
 
 
