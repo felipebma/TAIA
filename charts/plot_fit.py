@@ -21,7 +21,6 @@ def plotScatter(testName, iterations):
 def plotHist2d(testName, iterations):
     print('scatter')
     for i in range(len(iterations)):
-        fig, ax = plt.subplots()
         x_values = iterations[i][0]
         max_y = max(iterations[i][1])
         y_values = [y/max_y for y in iterations[i][1]]
