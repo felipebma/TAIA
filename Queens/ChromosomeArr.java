@@ -67,7 +67,7 @@ class ChromosomeArr implements Chromosome {
     }
 
     private void fitness() {
-        this.fitness = this.fitnessStrategy.calculateFitness(queens);
+        this.fitness = this.fitnessStrategy.calculateFitness(getBitRepresentation());
     }
 
     private void shuffle(int[] arr) {
