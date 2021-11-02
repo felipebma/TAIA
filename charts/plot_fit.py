@@ -23,7 +23,7 @@ def plotHist2d(testName, iterations):
     for i in range(len(iterations)):
         x_values = iterations[i][0]
         max_y = max(iterations[i][1])
-        y_values = [y/max_y for y in iterations[i][1]]
+        y_values = [y for y in iterations[i][1]]
         plt.hist2d(x_values, y_values, cmap=plt.cm.Reds,
                    bins=(len(set(x_values)), 8))
         plt.colorbar()
@@ -73,7 +73,7 @@ def plotFit(testName):
                     iterations[it][1].append(int(value))
                 count += 1
 
-    plotScatter(testName, iterations)
+    # plotScatter(testName, iterations)
     plotBoxplot(testName, iterations)
     plotHist2d(testName, iterations)
 
