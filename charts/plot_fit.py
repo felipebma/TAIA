@@ -61,3 +61,4 @@ def plotFit(testName):
 
 
 plotFit('default')
+plotFit('alternativeFitness')
