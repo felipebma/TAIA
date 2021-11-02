@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -27,22 +28,25 @@ public class Main {
 
     private static void runTest(TestConfig config) {
         try {
-            File output = new File(String.format("../data/%s.out", config.fileName));
-            File fitnesses = new File(String.format("../data/%s.fit", config.fileName));
+            File output = new File(String.format("../data/%s_result.csv", config.fileName));
+            File fitnesses = new File(String.format("../data/%s_fit.csv", config.fileName));
             fitnesses.createNewFile();
             output.createNewFile();
             FileWriter ow = new FileWriter(output, false);
             FileWriter fw = new FileWriter(fitnesses, false);
+            StringJoiner fitness = new StringJoiner("\n\n");
             ow.write("Best_Fitness,Generations_Count,Converged_Count");
             for (int i = 0; i < 30; i++) {
                 TestData testResults = run(config.populationSize, config.fitnessCounterLimit,
                         config.recombinationProbability, config.mutationProbability, config.fitnessStrategy);
                 ow.write("\n" + testResults.toString());
+                StringJoiner sj = new StringJoiner("\n");
                 for (List<Integer> fit : testResults.fitnesses) {
-                    fw.write(fit.toString().replace("[", "").replace("]", "") + "\n");
+                    sj.add(fit.toString().replace("[", "").replace("]", "").replaceAll(", ", ","));
                 }
-                fw.write("\n");
+                fitness.add(sj.toString());
             }
+            fw.write(fitness.toString() + "\n");
             ow.close();
             fw.close();
         } catch (Exception e) {
