@@ -2,9 +2,12 @@ from typing import Text
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
+import sys
+import os
 
 
 def plotScatter(testName, iterations):
+    print('scatter')
     for i in range(len(iterations)):
         fig, ax = plt.subplots()
         x_values = iterations[i][0]
@@ -15,7 +18,22 @@ def plotScatter(testName, iterations):
         plt.close()
 
 
+def plotHist2d(testName, iterations):
+    print('scatter')
+    for i in range(len(iterations)):
+        fig, ax = plt.subplots()
+        x_values = iterations[i][0]
+        max_y = max(iterations[i][1])
+        y_values = [y/max_y for y in iterations[i][1]]
+        plt.hist2d(x_values, y_values, cmap=plt.cm.Reds,
+                   bins=(len(set(x_values)), 8))
+        plt.colorbar()
+        plt.savefig('{}/hist2d/plot{}.png'.format(testName, i))
+        plt.close()
+
+
 def plotBoxplot(testName, iterations):
+    print('boxplot')
     for i in range(len(iterations)):
 
         map = {}
@@ -56,9 +74,19 @@ def plotFit(testName):
                     iterations[it][1].append(int(value))
                 count += 1
 
-    plotScatter(testName, iterations)
-    plotBoxplot(testName, iterations)
+    # plotScatter(testName, iterations)
+    # plotBoxplot(testName, iterations)
+    plotHist2d(testName, iterations)
 
 
-plotFit('default')
-plotFit('alternativeFitness')
+path = sys.argv[1]
+testName = sys.argv[2]
+if not os.path.exists('{}/charts/{}/boxplot'.format(path, testName)):
+    os.makedirs("{}/charts/{}/boxplot".format(path, testName))
+if not os.path.exists('{}/charts/{}/scatter'.format(path, testName)):
+    os.makedirs("{}/charts/{}/scatter".format(path, testName))
+if not os.path.exists('{}/charts/{}/hist2d'.format(path, testName)):
+    os.makedirs("{}/charts/{}/hist2d".format(path, testName))
+
+print(testName)
+plotFit(testName)
