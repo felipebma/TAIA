@@ -16,9 +16,7 @@ Segunda parte:
     Representação ok
     Recombinação 
     Mutação ok(mudou a probabilidade)
-    Seleção de pais – roleta?
-    [1,2,3,2,5,6]
-    [1,3,6,8,13,19]
+    Seleção de pais – roleta ok
     Seleção de sobreviventes: geracional ou substituição do pior
     Tamanho da população: 10? 30? 50? 70? 120? 200? ok
     O fitness pode ser melhorado? ok
@@ -31,8 +29,14 @@ Para cada implementação devem ser feitas 30 execuções e analisar
     Em quantas execuções o algoritmo convergiu (no/30 execuções);
     Em que iteração o algoritmo convergiu (média e desvio padrão);
     Número de indivíduos que convergiram por execução;
-    Fitness médio da população em cada uma das 30 execuções;
+    
+    (30 execucoes, cada uma com 100 gen, com 100 indivuduos)
+
+    Fitness médio da população em cada uma das 30 execuções: (pra cada execucao, fazer uma media de cada as geracoes) -> media de fitness x geracao (ou seja, 30 graficos desse)
+
     Colocar gráficos de convergência com a média e o melhor indivíduo por iteração;
-    Fitness médio alcançado nas 30 execuções (média e desvio padrão);
-    Análise adicional: Quantas iterações são necessárias para toda a população convergir?
+    
+    Fitness médio alcançado nas 30 execuções (média e desvio padrão): 30 blocos -> 1 só
+    
+    Análise adicional: Quantas iterações são necessárias para toda a população convergir? (fodac)
 
