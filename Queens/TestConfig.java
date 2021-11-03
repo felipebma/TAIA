@@ -8,9 +8,10 @@ public class TestConfig {
     double mutationProbability;
     FitnessStrategy fitnessStrategy;
     StopStrategy stopStrategy;
+    SelectionStrategy selectionStrategy;
 
     public TestConfig(String fileName, int populationSize, int fitnessCounterLimit, double recombinationProbability,
-            double mutationProbability, FitnessStrategy fitnessStrategy, StopStrategy stopStrategy) {
+            double mutationProbability, FitnessStrategy fitnessStrategy, StopStrategy stopStrategy, SelectionStrategy selectionStrategy) {
         this.fileName = fileName;
         this.populationSize = populationSize;
         this.fitnessCounterLimit = fitnessCounterLimit;
@@ -18,5 +19,6 @@ public class TestConfig {
         this.mutationProbability = mutationProbability;
         this.fitnessStrategy = fitnessStrategy;
         this.stopStrategy = stopStrategy;
+        this.selectionStrategy = selectionStrategy;
     }
 }

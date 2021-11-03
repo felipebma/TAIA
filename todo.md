@@ -16,9 +16,7 @@ Segunda parte:
     Representação ok
     Recombinação 
     Mutação ok(mudou a probabilidade)
-    Seleção de pais – roleta?
-    [1,2,3,2,5,6]
-    [1,3,6,8,13,19]
+    Seleção de pais – roleta ok
     Seleção de sobreviventes: geracional ou substituição do pior
     Tamanho da população: 10? 30? 50? 70? 120? 200? ok
     O fitness pode ser melhorado? ok

@@ -14,21 +14,30 @@ public class Main {
     private static final Random rnd = new Random();
 
     public static void main(String[] args) {
-        runDefault();
+        // runDefault();
         runAlternativeFitness();
-        runLowerMutation();
+        runAlternativeFitnessRoleta();
+        // runLowerMutation();
     }
 
     private static void runDefault() {
-        runTest(new TestConfig("default", 100, (int) 1e4, 0.9, 0.4, FitnessStrategy.normalStrategy, StopStrategy.runAllGenerations()));
+        runTest(new TestConfig("default", 100, (int) 1e4, 0.9, 0.4, FitnessStrategy.normalStrategy,
+                StopStrategy.runAllGenerations(), SelectionStrategy.get2OutOf5Random));
     }
 
     private static void runAlternativeFitness() {
-        runTest(new TestConfig("alternativeFitness", 100, (int) 1e4, 0.9, 0.4, FitnessStrategy.alternativeStrategy, StopStrategy.runAllGenerations()));
+        runTest(new TestConfig("alternativeFitness", 100, (int) 1e4, 0.9, 0.4, FitnessStrategy.alternativeStrategy,
+                StopStrategy.runAllGenerations(), SelectionStrategy.get2OutOf5Random));
+    }
+
+    private static void runAlternativeFitnessRoleta() {
+        runTest(new TestConfig("alternativeFitnessRoleta", 100, (int) 1e4, 0.9, 0.4, FitnessStrategy.alternativeStrategy,
+                StopStrategy.runAllGenerations(), SelectionStrategy.wheightedRandom));
     }
 
     private static void runLowerMutation() {
-        runTest(new TestConfig("lowerMutation", 100, (int) 1e4, 0.9, 0.0, FitnessStrategy.alternativeStrategy, StopStrategy.runAllGenerations()));
+        runTest(new TestConfig("lowerMutation", 100, (int) 1e4, 0.9, 0.0, FitnessStrategy.alternativeStrategy,
+                StopStrategy.runAllGenerations(), SelectionStrategy.get2OutOf5Random));
     }
 
     private static void runTest(TestConfig config) {
@@ -43,7 +52,8 @@ public class Main {
             ow.write("Best_Fitness,Generations_Count,Converged_Count");
             for (int i = 0; i < 30; i++) {
                 TestData testResults = run(config.populationSize, config.fitnessCounterLimit,
-                        config.recombinationProbability, config.mutationProbability, config.fitnessStrategy, config.stopStrategy);
+                        config.recombinationProbability, config.mutationProbability, config.fitnessStrategy,
+                        config.stopStrategy, config.selectionStrategy);
                 ow.write("\n" + testResults.toString());
                 StringJoiner sj = new StringJoiner("\n");
                 for (List<Integer> fit : testResults.fitnesses) {
@@ -61,15 +71,17 @@ public class Main {
     }
 
     private static TestData run(int populationSize, int fitnessCounterLimit, double recombinationProbability,
-            double mutationProbability, FitnessStrategy fitnessStrategy, StopStrategy stopStrategy) {
+            double mutationProbability, FitnessStrategy fitnessStrategy, StopStrategy stopStrategy,
+            SelectionStrategy selectionStrategy) {
         List<Chromosome> chromosomes = generatePopulation(populationSize, fitnessStrategy);
         int fitnessCounter = populationSize;
         Collections.sort(chromosomes);
         int numberOfGenerations = 1;
         List<List<Integer>> fitnesses = new ArrayList<>();
         fitnesses.add(chromosomes.stream().map(c -> c.getFitness()).collect(Collectors.toList()));
-        while (!stopStrategy.finished(chromosomes, fitnessStrategy, fitnessCounter, fitnessCounterLimit, numberOfGenerations)) {
-            List<Chromosome> parents = getParents(chromosomes);
+        while (!stopStrategy.finished(chromosomes, fitnessStrategy, fitnessCounter, fitnessCounterLimit,
+                numberOfGenerations)) {
+            List<Chromosome> parents = selectionStrategy.getParents(chromosomes);
             List<Chromosome> children = generateChildren(parents, recombinationProbability, fitnessStrategy);
             fitnessCounter += 2;
             for (Chromosome c : chromosomes) {
@@ -100,13 +112,6 @@ public class Main {
             population.add(new ChromosomeArr(fitnessStrategy));
         }
         return population;
-    }
-
-    private static List<Chromosome> getParents(List<Chromosome> population) {
-        Collections.shuffle(population, rnd);
-        List<Chromosome> randomFive = population.subList(0, 5);
-        Collections.sort(randomFive);
-        return randomFive.subList(0, 2);
     }
 
     private static List<Chromosome> generateChildren(List<Chromosome> parents, double recombinationProbability,
