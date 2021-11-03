@@ -15,9 +15,10 @@ public class Main {
 
     public static void main(String[] args) {
         // runDefault();
-        runAlternativeFitness();
-        runAlternativeFitnessRoleta();
+        // runAlternativeFitness();
+        // runAlternativeFitnessRoleta();
         // runLowerMutation();
+        runLowerMutationRoleta();
     }
 
     private static void runDefault() {
@@ -38,6 +39,11 @@ public class Main {
     private static void runLowerMutation() {
         runTest(new TestConfig("lowerMutation", 100, (int) 1e4, 0.9, 0.0, FitnessStrategy.alternativeStrategy,
                 StopStrategy.runAllGenerations(), SelectionStrategy.get2OutOf5Random));
+    }
+
+     private static void runLowerMutationRoleta() {
+        runTest(new TestConfig("lowerMutationRoleta", 100, (int) 1e4, 0.9, 0.0, FitnessStrategy.alternativeStrategy,
+                StopStrategy.runAllGenerations(), SelectionStrategy.wheightedRandom));
     }
 
     private static void runTest(TestConfig config) {
