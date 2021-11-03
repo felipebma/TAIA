@@ -31,8 +31,12 @@ Para cada implementação devem ser feitas 30 execuções e analisar
     Em quantas execuções o algoritmo convergiu (no/30 execuções);
     Em que iteração o algoritmo convergiu (média e desvio padrão);
     Número de indivíduos que convergiram por execução;
-    Fitness médio da população em cada uma das 30 execuções;
+
+    Fitness médio da população em cada uma das 30 execuções; precisa ajeitar os graficos
+    
     Colocar gráficos de convergência com a média e o melhor indivíduo por iteração;
-    Fitness médio alcançado nas 30 execuções (média e desvio padrão);
+    
+    Fitness médio alcançado nas 30 execuções (média e desvio padrão); ok
+    
     Análise adicional: Quantas iterações são necessárias para toda a população convergir?
 
