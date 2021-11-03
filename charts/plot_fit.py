@@ -93,7 +93,7 @@ def plotFit(testName):
                     iterations[it][1].append(int(value))
                 count += 1
 
-    # plotScatter(testName, iterations)
+    plotScatter(testName, iterations)
     plotBoxplot(testName, iterations)
     plotHist2d(testName, iterations)
 
@@ -172,7 +172,7 @@ if not os.path.exists('{}/charts/{}/hist2d'.format(path, testName)):
 if not os.path.exists('{}/charts/{}/averageAndBestPerExec'.format(path, testName)):
     os.makedirs("{}/charts/{}/averageAndBestPerExec".format(path, testName))
 
-# print(testName)
-# plotFit(testName)
-# plotAverageFitnessForAll(testName)
+print(testName)
+plotFit(testName)
+plotAverageFitnessForAll(testName)
 plotAverageFitnessPerExecution(testName)
