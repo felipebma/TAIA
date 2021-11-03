@@ -1,2 +1,4 @@
 bin/Queens
 /bin/
+.idea/*
+.vscode/*
