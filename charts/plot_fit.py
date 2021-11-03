@@ -54,6 +54,26 @@ def plotBoxplot(testName, iterations, plotName="plot"):
         plt.close()
 
 
+def plotAvgAndBestLines(testName, avgPerExec, bestPerExec):
+    print('avg and best per execution')
+
+    for exectution in range(30):
+        plt.xlabel("Generation")
+        plt.ylabel("Fitness")
+
+        avgFitness = avgPerExec[exectution]
+        maxFitness = bestPerExec[exectution]
+
+        x = [x for x in range(1, 101)]
+
+        plt.plot(x, avgFitness, color="#c6b3fa")
+        plt.plot(x, maxFitness, color="#82decd")
+
+        plt.savefig(
+            '{}/averageAndBestPerExec/exec{}.png'.format(testName, exectution))
+        plt.close()
+
+
 def plotFit(testName):
 
     iterations = [[[], []]]
@@ -117,6 +137,7 @@ def plotAverageFitnessForAll(testName):
 
 def plotAverageFitnessPerExecution(testName):
     averagePerExec = [[]]
+    bestPerExec = [[]]
 
     with open('../data/{}_fit.csv'.format(testName)) as csv_file:
         execution = 0
@@ -127,24 +148,17 @@ def plotAverageFitnessPerExecution(testName):
             if row == []:
                 execution += 1
                 averagePerExec.append([])
+                bestPerExec.append([])
             else:
                 fitSum = 0
+                maxFit = 0
                 for value in row:
                     fitSum += int(value)
+                    maxFit = max(maxFit, int(value))
                 averagePerExec[execution].append(fitSum/100)
+                bestPerExec[execution].append(maxFit)
 
-    iterations = [[], []]
-    execution = 0
-
-    for averagePerGen in averagePerExec:
-        for genAverage in averagePerGen:
-            iterations[0].append(execution)
-            iterations[1].append(genAverage)
-        execution += 1
-
-    plotScatter(testName, [iterations], "averageFitnessPerExecution")
-    plotBoxplot(testName, [iterations], "averageFitnessPerExecution")
-    plotHist2d(testName, [iterations], "averageFitnessPerExecution")
+    plotAvgAndBestLines(testName, averagePerExec, bestPerExec)
 
 
 path = sys.argv[1]
@@ -155,8 +169,10 @@ if not os.path.exists('{}/charts/{}/scatter'.format(path, testName)):
     os.makedirs("{}/charts/{}/scatter".format(path, testName))
 if not os.path.exists('{}/charts/{}/hist2d'.format(path, testName)):
     os.makedirs("{}/charts/{}/hist2d".format(path, testName))
+if not os.path.exists('{}/charts/{}/averageAndBestPerExec'.format(path, testName)):
+    os.makedirs("{}/charts/{}/averageAndBestPerExec".format(path, testName))
 
-print(testName)
-plotFit(testName)
-plotAverageFitnessForAll(testName)
+# print(testName)
+# plotFit(testName)
+# plotAverageFitnessForAll(testName)
 plotAverageFitnessPerExecution(testName)
