@@ -10,6 +10,9 @@ def plotScatter(testName, iterations, plotName="plot"):
     print('scatter')
     for i in range(len(iterations)):
         fig, ax = plt.subplots()
+        plt.title("Fitness Distribution per Generation (Scatter)")
+        plt.xlabel("Generation")
+        plt.ylabel("Fitness")
         x_values = iterations[i][0]
         y_values = iterations[i][1]
         ax.scatter(x_values, y_values)
@@ -24,6 +27,9 @@ def plotHist2d(testName, iterations, plotName="plot"):
         x_values = iterations[i][0]
         max_y = max(iterations[i][1])
         y_values = [y for y in iterations[i][1]]
+        plt.title("Fitness Distribution per Generation (Histogram)")
+        plt.xlabel("Generation")
+        plt.ylabel("Fitness")
         plt.hist2d(x_values, y_values, cmap=plt.cm.Reds,
                    bins=(len(set(x_values)), 8))
         plt.colorbar()
@@ -50,6 +56,9 @@ def plotBoxplot(testName, iterations, plotName="plot"):
 
         ax.boxplot(y_values, positions=x_values)
         ax.set_xticks(x_values)
+        plt.title("Fitness Average per Generation")
+        plt.xlabel("Generation")
+        plt.ylabel("Fitness")
         plt.savefig('{}/boxplot/{}{}.png'.format(testName, plotName, i))
         plt.close()
 
@@ -58,6 +67,7 @@ def plotAvgAndBestLines(testName, avgPerExec, bestPerExec):
     print('avg and best per execution')
 
     for exectution in range(30):
+        plt.title("Average and Best Fitness x Generation")
         plt.xlabel("Generation")
         plt.ylabel("Fitness")
 
@@ -93,17 +103,18 @@ def plotFit(testName):
                     iterations[it][1].append(int(value))
                 count += 1
 
-    plotScatter(testName, iterations)
+    # plotScatter(testName, iterations)
     plotBoxplot(testName, iterations)
     plotHist2d(testName, iterations)
 
 
 def plotAverageFitnessForAll(testName):
+    pop_size = 20 if testName=="runLowerMutationRoletaSmallPopulation" else 100
     averageForAll = []
 
     for generation in range(100):
         averageForAll.append([])
-        for individual in range(100):
+        for individual in range(pop_size):
             averageForAll[generation].append(0)
 
     with open('../data/{}_fit.csv'.format(testName)) as csv_file:
@@ -123,19 +134,20 @@ def plotAverageFitnessForAll(testName):
     iterations = [[], []]
 
     for generation in range(100):
-        for individual in range(100):
+        for individual in range(pop_size):
             fitSum = averageForAll[generation][individual]
             fitAvg = fitSum / 30
 
             iterations[0].append(generation)
             iterations[1].append(fitAvg)
 
-    plotScatter(testName, [iterations], "averageFitnessForAll")
+    # plotScatter(testName, [iterations], "averageFitnessForAll")
     plotBoxplot(testName, [iterations], "averageFitnessForAll")
     plotHist2d(testName, [iterations], "averageFitnessForAll")
 
 
 def plotAverageFitnessPerExecution(testName):
+    pop_size = 20 if testName=="runLowerMutationRoletaSmallPopulation" else 100
     averagePerExec = [[]]
     bestPerExec = [[]]
 
@@ -155,7 +167,7 @@ def plotAverageFitnessPerExecution(testName):
                 for value in row:
                     fitSum += int(value)
                     maxFit = max(maxFit, int(value))
-                averagePerExec[execution].append(fitSum/100)
+                averagePerExec[execution].append(fitSum/pop_size)
                 bestPerExec[execution].append(maxFit)
 
     plotAvgAndBestLines(testName, averagePerExec, bestPerExec)
