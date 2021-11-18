@@ -11,7 +11,11 @@ class ChromosomeArr implements Chromosome {
     FitnessStrategy fitnessStrategy;
 
     public ChromosomeArr(FitnessStrategy fitnessStrategy) {
-        representation = new double[] { 0, 1, 2, 3, 4, 5, 6, 7 }; // TODO: initialize this with 30 random numbers
+        representation = new double[30];
+        
+        for(int i = 0; i < 30; i++){
+            representation[i] = rnd.nextDouble(); // TODO: fazer isso pegar só numero entre -15 e 15
+        }
                                                                   // between -15 and 15
         shuffle(representation);
         this.fitnessStrategy = fitnessStrategy;
