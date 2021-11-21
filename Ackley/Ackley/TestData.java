@@ -10,9 +10,9 @@ public class TestData {
     Chromosome bestPermutation;
     int numberOfGenerations;
     FitnessStrategy fitnessStrategy;
-    List<List<Integer>> fitnesses;
+    List<List<Double>> fitnesses;
 
-    public TestData(List<Chromosome> chromosomes, List<List<Integer>> fitnesses, int numberOfGenerations,
+    public TestData(List<Chromosome> chromosomes, List<List<Double>> fitnesses, int numberOfGenerations,
             FitnessStrategy fitnessStrategy) {
         this.chromosomes = chromosomes;
         this.fitnesses = fitnesses;

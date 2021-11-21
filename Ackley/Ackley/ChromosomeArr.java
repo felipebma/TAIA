@@ -7,16 +7,16 @@ class ChromosomeArr implements Chromosome {
 
     Random rnd = new Random();
     double[] representation;
-    int fitness;
+    double fitness;
     FitnessStrategy fitnessStrategy;
 
     public ChromosomeArr(FitnessStrategy fitnessStrategy) {
         representation = new double[30];
-        
-        for(int i = 0; i < 30; i++){
-            representation[i] = rnd.nextDouble(); // TODO: fazer isso pegar só numero entre -15 e 15
+
+        for (int i = 0; i < 30; i++) {
+            double randomValue = AckleyUtils.randomDoubleInRange(-15.0, 15.0);
+            representation[i] = randomValue;
         }
-                                                                  // between -15 and 15
         shuffle(representation);
         this.fitnessStrategy = fitnessStrategy;
         fitness();
@@ -30,7 +30,7 @@ class ChromosomeArr implements Chromosome {
 
     @Override
     public Chromosome cutAndCrossfill(Chromosome other, int begin, int end) {
-        double[] newChild = new double[8];
+        double[] newChild = new double[30];
         double[] otherRepresentation = other.getRepresentation();
         // TODO: implement this again
         // Set<Integer> used = new HashSet<>();
@@ -89,11 +89,14 @@ class ChromosomeArr implements Chromosome {
 
     @Override
     public int compareTo(Chromosome o) {
-        return o.getFitness() - fitness;
+        double comp = o.getFitness() - fitness;
+        if(comp < 0.0) return -1;
+        else if(comp > 0.0) return 1;
+        else return 0;
     }
 
     @Override
-    public int getFitness() {
+    public double getFitness() {
         return this.fitness;
     }
 

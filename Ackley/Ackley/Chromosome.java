@@ -6,7 +6,7 @@ public interface Chromosome extends Comparable<Chromosome> {
 
     public Chromosome cutAndCrossfill(Chromosome other, int end);
 
-    public int getFitness();
+    public double getFitness();
 
     public void mutation();
 

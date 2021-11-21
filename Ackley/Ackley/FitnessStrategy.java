@@ -1,33 +1,34 @@
 package Ackley;
 
 public interface FitnessStrategy {
-    public int calculateFitness(double [] arr);
+    public double calculateFitness(double[] arr);
 
-    public int maxFitness();
+    public double maxFitness();
 
     static FitnessStrategy normalStrategy = new FitnessStrategy() {
         @Override
-        public int calculateFitness(double [] arr) {
+        public double calculateFitness(double[] arr) {
             double ackleyValue = AckleyUtils.calculateAckleyFunction(arr);
-            return 0; // TODO
+            // This will never be 0, and will be 1 when ackleyValue == 0
+            return Math.exp(-ackleyValue);
         }
 
         @Override
-        public int maxFitness() {
-            return 10000;
+        public double maxFitness() {
+            return 1.0;
         }
 
     };
 
     static FitnessStrategy alternativeStrategy = new FitnessStrategy() {
         @Override
-        public int calculateFitness(double [] arr) {
+        public double calculateFitness(double[] arr) {
             double ackleyValue = AckleyUtils.calculateAckleyFunction(arr);
-            return 0; // TODO
+            return -ackleyValue; // TODO: se precisar
         }
 
         @Override
-        public int maxFitness() {
+        public double maxFitness() {
             return 10000;
         }
     };

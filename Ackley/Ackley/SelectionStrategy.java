@@ -24,10 +24,8 @@ public interface SelectionStrategy {
 
         @Override
         public List<Chromosome> getParents(List<Chromosome> chromosomes) {
-            Random rnd = new Random();
-
-            List<Integer> cumulatedFitness = new ArrayList<>();
-            Integer fitnessSum = chromosomes.get(0).getFitness();
+            List<Double> cumulatedFitness = new ArrayList<>();
+            Double fitnessSum = chromosomes.get(0).getFitness();
             cumulatedFitness.add(fitnessSum);
             for (int i = 1; i < chromosomes.size(); i++) {
                 cumulatedFitness.add(chromosomes.get(i).getFitness() + cumulatedFitness.get(i - 1));
@@ -37,7 +35,7 @@ public interface SelectionStrategy {
             List<Chromosome> twoWheightedRandom = new ArrayList<>();
 
             // get first parent
-            int randomFitness = rnd.nextInt(fitnessSum);
+            double randomFitness = AckleyUtils.randomDoubleInRange(0, fitnessSum);
             System.out.println("random Fitness = " + randomFitness);
             int pos = getLowerBound(cumulatedFitness, randomFitness);
             System.out.println("pos = " + pos);
@@ -46,7 +44,7 @@ public interface SelectionStrategy {
             // get second parent (must be different from first)
             int pos2 = pos;
             while (pos2 == pos) {
-                randomFitness = rnd.nextInt(fitnessSum);
+                randomFitness = AckleyUtils.randomDoubleInRange(0, fitnessSum);
                 pos2 = getLowerBound(cumulatedFitness, randomFitness);
             }
             twoWheightedRandom.add(chromosomes.get(pos));
@@ -54,7 +52,7 @@ public interface SelectionStrategy {
             return twoWheightedRandom;
         }
 
-        private int getLowerBound(List<Integer> cumulatedFitness, int randomFitness) {
+        private int getLowerBound(List<Double> cumulatedFitness, double randomFitness) {
             int l = 0, r = cumulatedFitness.size() - 1;
             while (l < r) {
                 int m = l + (r - l) / 2;

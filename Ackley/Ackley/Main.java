@@ -70,7 +70,7 @@ public class Main {
                         config.stopStrategy, config.selectionStrategy);
                 ow.write("\n" + testResults.toString());
                 StringJoiner sj = new StringJoiner("\n");
-                for (List<Integer> fit : testResults.fitnesses) {
+                for (List<Double> fit : testResults.fitnesses) {
                     sj.add(fit.toString().replace("[", "").replace("]", "").replaceAll(", ", ","));
                 }
                 fitness.add(sj.toString());
@@ -91,7 +91,7 @@ public class Main {
         int fitnessCounter = populationSize;
         Collections.sort(chromosomes);
         int numberOfGenerations = 1;
-        List<List<Integer>> fitnesses = new ArrayList<>();
+        List<List<Double>> fitnesses = new ArrayList<>();
         fitnesses.add(chromosomes.stream().map(c -> c.getFitness()).collect(Collectors.toList()));
         while (!stopStrategy.finished(chromosomes, fitnessStrategy, fitnessCounter, fitnessCounterLimit,
                 numberOfGenerations)) {
