@@ -6,9 +6,9 @@ public interface Chromosome extends Comparable<Chromosome> {
 
     public Chromosome cutAndCrossfill(Chromosome other, int splitPos);
 
-    public double getFitness();
+    public Double getFitness();
 
-    public void mutation(double mutationProbability);
+    public void mutation(Double mutationProbability);
 
-    public double[] getRepresentation();
+    public Double[] getRepresentation();
 }

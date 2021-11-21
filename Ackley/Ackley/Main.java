@@ -14,12 +14,12 @@ public class Main {
     private static final Random rnd = new Random();
 
     public static void main(String[] args) {
-        // runDefault();
+         runDefault();
         // runAlternativeFitness();
         // runAlternativeFitnessRoleta();
         // runLowerMutation();
-        runLowerMutationRoleta();
-        runLowerMutationRoletaSmallPopulation();
+        //runLowerMutationRoleta();
+        //runLowerMutationRoletaSmallPopulation();
     }
 
     private static void runDefault() {

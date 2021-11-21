@@ -6,15 +6,15 @@ import java.util.Random;
 class ChromosomeArr implements Chromosome {
 
     Random rnd = new Random();
-    double[] representation;
-    double fitness;
+    Double[] representation;
+    Double fitness;
     FitnessStrategy fitnessStrategy;
 
     public ChromosomeArr(FitnessStrategy fitnessStrategy) {
-        representation = new double[30];
+        representation = new Double[30];
 
         for (int i = 0; i < 30; i++) {
-            double randomValue = AckleyUtils.randomDoubleInRange(-15.0, 15.0);
+            Double randomValue = AckleyUtils.randomDoubleInRange(-15.0, 15.0);
             representation[i] = randomValue;
         }
         shuffle(representation);
@@ -22,7 +22,7 @@ class ChromosomeArr implements Chromosome {
         fitness();
     }
 
-    public ChromosomeArr(double[] arr, FitnessStrategy fitnessStrategy) {
+    public ChromosomeArr(Double[] arr, FitnessStrategy fitnessStrategy) {
         representation = Arrays.copyOf(arr, arr.length);
         this.fitnessStrategy = fitnessStrategy;
         fitness();
@@ -30,8 +30,8 @@ class ChromosomeArr implements Chromosome {
 
     //@Override
     //public Chromosome cutAndCrossfill(Chromosome other, int begin, int end) {
-        //double[] newChild = new double[30];
-        //double[] otherRepresentation = other.getRepresentation();
+        //Double[] newChild = new Double[30];
+        //Double[] otherRepresentation = other.getRepresentation();
         //// Set<Integer> used = new HashSet<>();
         //// for (int i = begin; i < end; i++) {
         //// newChild[i] = this.representation[i];
@@ -53,8 +53,8 @@ class ChromosomeArr implements Chromosome {
 
     @Override
     public Chromosome cutAndCrossfill(Chromosome other, int splitPos) {
-        double[] newChild = new double[30];
-        double[] otherRepresentation = other.getRepresentation();
+        Double[] newChild = new Double[30];
+        Double[] otherRepresentation = other.getRepresentation();
         for(int i = 0; i < splitPos; i++){
             newChild[i] = this.representation[i];
         }
@@ -65,10 +65,10 @@ class ChromosomeArr implements Chromosome {
         return new ChromosomeArr(newChild, this.fitnessStrategy);
     }
 
-    public void mutation(double mutationProbability) {
+    public void mutation(Double mutationProbability) {
         for (int i = 0; i < 30; i++) {
             if (rnd.nextDouble() < mutationProbability) {
-                representation[i] = AckleyUtils.randomDoubleInRange(-15, 15);
+                representation[i] = AckleyUtils.randomDoubleInRange(-15.0, 15.0);
             }
         }
         fitness();
@@ -78,28 +78,34 @@ class ChromosomeArr implements Chromosome {
         this.fitness = this.fitnessStrategy.calculateFitness(this.representation);
     }
 
-    private void shuffle(double[] arr) {
+    private void shuffle(Double[] arr) {
         for (int i = arr.length - 1; i > 0; i--) {
             int pos = rnd.nextInt(i + 1);
             swap(arr, i, pos);
         }
     }
 
-    private void swap(double[] arr, int i, int j) {
-        double aux = arr[i];
+    private void swap(Double[] arr, int i, int j) {
+        Double aux = arr[i];
         arr[i] = arr[j];
         arr[j] = aux;
     }
 
     @Override
     public String toString() {
-        return String.format("\tQueens Positions: %s\n\tFitness: %d",
-                Arrays.toString(this.representation), this.fitness);
+        String representationString = "";
+        String ends [] = {", ", "\n"};
+        for(int i = 0; i < 30; i++){
+            int pos = (i >= 29) ? 1 : 0;
+            representationString += this.representation[i] + ends[pos];
+        }
+        return String.format("\trepresentation: %s\n\tFitness: %.3f",
+                representationString, this.fitness);
     }
 
     @Override
     public int compareTo(Chromosome o) {
-        double comp = o.getFitness() - fitness;
+        Double comp = o.getFitness() - fitness;
         if (comp < 0.0)
             return -1;
         else if (comp > 0.0)
@@ -109,12 +115,12 @@ class ChromosomeArr implements Chromosome {
     }
 
     @Override
-    public double getFitness() {
+    public Double getFitness() {
         return this.fitness;
     }
 
     @Override
-    public double[] getRepresentation() {
+    public Double[] getRepresentation() {
         return this.representation;
     }
 }
