@@ -6,7 +6,7 @@ class AckleyUtils {
 
     public static Double randomDoubleInRange(Double rangeMin, Double rangeMax) {
         Random r = new Random();
-        return rangeMin + (rangeMax - rangeMin) * r.nextDouble();
+        return -15.0 + 30.0 * r.nextDouble();
     }
 
     public static Double calculateAckleyFunction(Double[] arr) {
@@ -31,4 +31,5 @@ class AckleyUtils {
             res += Math.cos(c3 * arr[i]);
         return res;
     }
+
 }

@@ -3,6 +3,7 @@ package Ackley;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -23,8 +24,8 @@ public class Main {
     }
 
     private static void runDefault() {
-        runTest(new TestConfig("default", 100, (int) 1e4, 0.9, 0.4, FitnessStrategy.normalStrategy,
-                StopStrategy.runAllGenerations(), SelectionStrategy.get2OutOf5Random));
+        runTest(new TestConfig("default", 10000, (int) 1e4, 0.8, 0.3, FitnessStrategy.normalStrategy,
+                StopStrategy.runAllGenerations(), SelectionStrategy.wheightedRandom));
     }
 
     private static void runAlternativeFitness() {
@@ -110,6 +111,7 @@ public class Main {
             fitnesses.add(chromosomes.stream().map(c -> c.getFitness()).collect(Collectors.toList()));
         }
         System.out.println(chromosomes.get(0));
+        System.out.println(chromosomes.get(0).getFitness() - chromosomes.get(1).getFitness());
         return new TestData(chromosomes, fitnesses, numberOfGenerations, fitnessStrategy);
     }
 
@@ -124,13 +126,14 @@ public class Main {
         List<Chromosome> population = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
             population.add(new ChromosomeArr(fitnessStrategy));
+            System.out.println(Arrays.toString(population.get(0).getRepresentation()));
         }
         return population;
     }
 
     private static List<Chromosome> generateChildren(List<Chromosome> parents, double recombinationProbability,
             FitnessStrategy fitnessStrategy) {
-        int splitPos = rnd.nextInt(6) + 1; // TODO: what is this 
+        int splitPos = rnd.nextInt(28) + 1;
         List<Chromosome> children = new ArrayList<>();
         if (rnd.nextDouble() < recombinationProbability) {
             children.add(parents.get(0).cutAndCrossfill(parents.get(1), splitPos));
