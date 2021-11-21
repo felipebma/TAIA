@@ -55,12 +55,12 @@ class ChromosomeArr implements Chromosome {
         return cutAndCrossfill(other, 0, end);
     }
 
-    public void mutation() {
-        int i = rnd.nextInt(8), j = i;
-        while (j == i) {
-            j = rnd.nextInt(8);
+    public void mutation(double mutationProbability) {
+        for (int i = 0; i < 30; i++) {
+            if (rnd.nextDouble() < mutationProbability) {
+                representation[i] = AckleyUtils.randomDoubleInRange(-15, 15);
+            }
         }
-        swap(representation, i, j);
         fitness();
     }
 
@@ -90,9 +90,12 @@ class ChromosomeArr implements Chromosome {
     @Override
     public int compareTo(Chromosome o) {
         double comp = o.getFitness() - fitness;
-        if(comp < 0.0) return -1;
-        else if(comp > 0.0) return 1;
-        else return 0;
+        if (comp < 0.0)
+            return -1;
+        else if (comp > 0.0)
+            return 1;
+        else
+            return 0;
     }
 
     @Override

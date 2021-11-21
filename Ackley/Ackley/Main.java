@@ -50,8 +50,8 @@ public class Main {
 
     private static void runLowerMutationRoletaSmallPopulation() {
         runTest(new TestConfig("runLowerMutationRoletaSmallPopulation", 20, (int) 1e4, 0.9, 0.1,
-                FitnessStrategy.alternativeStrategy,
-                StopStrategy.runAllGenerations(), SelectionStrategy.wheightedRandom));
+                FitnessStrategy.alternativeStrategy, StopStrategy.runAllGenerations(),
+                SelectionStrategy.wheightedRandom));
     }
 
     private static void runTest(TestConfig config) {
@@ -100,7 +100,7 @@ public class Main {
             fitnessCounter += 2;
             for (Chromosome c : chromosomes) {
                 if (rnd.nextDouble() < mutationProbability) {
-                    c.mutation();
+                    c.mutation(mutationProbability);
                     fitnessCounter++;
                 }
             }

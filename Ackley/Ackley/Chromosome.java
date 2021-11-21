@@ -8,7 +8,7 @@ public interface Chromosome extends Comparable<Chromosome> {
 
     public double getFitness();
 
-    public void mutation();
+    public void mutation(double mutationProbability);
 
     public double[] getRepresentation();
 }
