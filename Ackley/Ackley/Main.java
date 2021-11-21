@@ -130,7 +130,7 @@ public class Main {
 
     private static List<Chromosome> generateChildren(List<Chromosome> parents, double recombinationProbability,
             FitnessStrategy fitnessStrategy) {
-        int splitPos = rnd.nextInt(6) + 1;
+        int splitPos = rnd.nextInt(6) + 1; // TODO: what is this 
         List<Chromosome> children = new ArrayList<>();
         if (rnd.nextDouble() < recombinationProbability) {
             children.add(parents.get(0).cutAndCrossfill(parents.get(1), splitPos));

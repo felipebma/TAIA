@@ -28,31 +28,41 @@ class ChromosomeArr implements Chromosome {
         fitness();
     }
 
-    @Override
-    public Chromosome cutAndCrossfill(Chromosome other, int begin, int end) {
-        double[] newChild = new double[30];
-        double[] otherRepresentation = other.getRepresentation();
-        // TODO: implement this again
-        // Set<Integer> used = new HashSet<>();
-        // for (int i = begin; i < end; i++) {
-        // newChild[i] = this.representation[i];
-        // used.add(newChild[i]);
-        // }
-        // int count = end - begin, j = end % 8;
-        // while (count < 8) {
-        // if (!used.contains(otherRepresentation[j])) {
-        // newChild[(begin + count) % 8] = otherRepresentation[j];
-        // used.add(otherRepresentation[j]);
-        // count++;
-        // }
-        // j = (j + 1) % 8;
-        // }
-        return new ChromosomeArr(newChild, this.fitnessStrategy);
-    }
+    //@Override
+    //public Chromosome cutAndCrossfill(Chromosome other, int begin, int end) {
+        //double[] newChild = new double[30];
+        //double[] otherRepresentation = other.getRepresentation();
+        //// Set<Integer> used = new HashSet<>();
+        //// for (int i = begin; i < end; i++) {
+        //// newChild[i] = this.representation[i];
+        //// used.add(newChild[i]);
+        //// }
+        //// int count = end - begin, j = end % 8;
+        //// while (count < 8) {
+        //// if (!used.contains(otherRepresentation[j])) {
+        //// newChild[(begin + count) % 8] = otherRepresentation[j];
+        //// used.add(otherRepresentation[j]);
+        //// count++;
+        //// }
+        //// j = (j + 1) % 8;
+        //// }
+
+
+        //return new ChromosomeArr(newChild, this.fitnessStrategy);
+    //}
 
     @Override
-    public Chromosome cutAndCrossfill(Chromosome other, int end) {
-        return cutAndCrossfill(other, 0, end);
+    public Chromosome cutAndCrossfill(Chromosome other, int splitPos) {
+        double[] newChild = new double[30];
+        double[] otherRepresentation = other.getRepresentation();
+        for(int i = 0; i < splitPos; i++){
+            newChild[i] = this.representation[i];
+        }
+        for(int i = splitPos; i < 30; i++){
+            newChild[i] = otherRepresentation[i];
+        }
+
+        return new ChromosomeArr(newChild, this.fitnessStrategy);
     }
 
     public void mutation(double mutationProbability) {
