@@ -93,8 +93,8 @@ class ChromosomeArr implements Chromosome {
 
     @Override
     public String toString() {
-        return String.format("\tQueens Positions: %s\n\tFitness: %d\n\tBitRepresentation: %s",
-                Arrays.toString(this.representation), this.fitness, this.getRepresentation());
+        return String.format("\tQueens Positions: %s\n\tFitness: %d",
+                Arrays.toString(this.representation), this.fitness);
     }
 
     @Override
