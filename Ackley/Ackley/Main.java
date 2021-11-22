@@ -30,27 +30,23 @@ public class Main {
             output.createNewFile();
             FileWriter ow = new FileWriter(output, false);
             FileWriter fw = new FileWriter(fitnesses, false);
-            //StringJoiner fitness = new StringJoiner("\n\n");
-            fw.write("\n\n");
-
+            StringJoiner fitness = new StringJoiner("\n\n");
             ow.write("Best_Fitness,Generations_Count,Converged_Count");
-            TestData testResults = null;
-            StringJoiner sj;
-            for (int i = 0; i < 30; i++) {
-                testResults = run(config.populationSize, config.fitnessCounterLimit,
+            for (int i = 0; i < 10; i++) {
+                TestData testResults = run(config.populationSize, config.fitnessCounterLimit,
                         config.recombinationProbability, config.mutationProbability, config.fitnessStrategy,
                         config.stopStrategy, config.selectionStrategy);
                 ow.write("\n" + testResults.toString());
-                sj = new StringJoiner("\n");
+                StringJoiner sj = new StringJoiner("\n");
                 for (List<Double> fit : testResults.fitnesses) {
                     sj.add(fit.toString().replace("[", "").replace("]", "").replaceAll(", ", ","));
                 }
-                //fitness.add(sj.toString());
-                fw.write(sj.toString());
+                fitness.add(sj.toString());
             }
-            fw.write(/* fitness.toString() + */ "\n");
+            fw.write(fitness.toString() + "\n");
             ow.close();
             fw.close();
+            System.gc();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -83,7 +79,8 @@ public class Main {
             Collections.sort(chromosomes);
             chromosomes = chromosomes.subList(0, populationSize);
             numberOfGenerations++;
-            fitnesses.add(chromosomes.stream().map(c -> c.getFitness()).collect(Collectors.toList()));
+            fitnesses.add(chromosomes.stream().map(c -> AckleyUtils.calculateAckleyFunction(c.getRepresentation()))
+                    .collect(Collectors.toList()));
         }
         Collections.sort(chromosomes);
         System.out.println("----------------------");

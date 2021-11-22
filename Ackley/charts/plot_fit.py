@@ -6,6 +6,9 @@ import sys
 import os
 
 POP_SIZE = 20000
+NUM_ITERATIONS = 100
+NUM_EXECUTIONS = 10
+
 
 def plotScatter(testName, iterations, plotName="plot"):
     print('scatter')
@@ -28,9 +31,13 @@ def plotHist2d(testName, iterations, plotName="plot"):
         x_values = iterations[i][0]
         max_y = max(iterations[i][1])
         y_values = [y for y in iterations[i][1]]
-        plt.title("Fitness Distribution per Generation (Histogram)")
+        plt.title("Ackley Distribution per Generation (Histogram)")
         plt.xlabel("Generation")
-        plt.ylabel("Fitness")
+        plt.ylabel("Ackley")
+
+        x_values.pop(0)
+        y_values.pop(0)
+
         plt.hist2d(x_values, y_values, cmap=plt.cm.Reds,
                    bins=(len(set(x_values)), 8))
         plt.colorbar()
@@ -49,6 +56,8 @@ def plotBoxplot(testName, iterations, plotName="plot"):
             map[iterations[i][0][j]].append(iterations[i][1][j])
 
         x_values = [x for x in map.keys()]
+        x_values.sort()
+        x_values.pop(0)
         y_values = []
         for x in x_values:
             y_values.append(np.array(map[x]))
@@ -57,9 +66,9 @@ def plotBoxplot(testName, iterations, plotName="plot"):
 
         ax.boxplot(y_values, positions=x_values)
         ax.set_xticks(x_values)
-        plt.title("Fitness Average per Generation")
+        plt.title("Ackley Average per Generation")
         plt.xlabel("Generation")
-        plt.ylabel("Fitness")
+        plt.ylabel("Ackley")
         plt.savefig('{}/boxplot/{}{}.png'.format(testName, plotName, i))
         plt.close()
 
@@ -67,7 +76,7 @@ def plotBoxplot(testName, iterations, plotName="plot"):
 def plotAvgAndBestLines(testName, avgPerExec, bestPerExec):
     print('avg and best per execution')
 
-    for exectution in range(30):
+    for exectution in range(10):
         plt.title("Average and Best Fitness x Generation")
         plt.xlabel("Generation")
         plt.ylabel("Fitness")
@@ -75,7 +84,10 @@ def plotAvgAndBestLines(testName, avgPerExec, bestPerExec):
         avgFitness = avgPerExec[exectution]
         maxFitness = bestPerExec[exectution]
 
-        x = [x for x in range(1, 101)]
+        x = [x for x in range(1, NUM_ITERATIONS)]
+
+        avgFitness.pop(0)
+        maxFitness.pop(0)
 
         plt.plot(x, avgFitness, color="#c6b3fa")
         plt.plot(x, maxFitness, color="#82decd")
@@ -101,12 +113,12 @@ def plotFit(testName):
             else:
                 for value in row:
                     iterations[it][0].append(count)
-                    iterations[it][1].append(value)
+                    iterations[it][1].append(float(value))
                 count += 1
 
     # plotScatter(testName, iterations)
     plotBoxplot(testName, iterations)
-    plotHist2d(testName, iterations)
+    # plotHist2d(testName, iterations)
 
 
 def plotAverageFitnessForAll(testName, pop_size=POP_SIZE):
@@ -127,23 +139,23 @@ def plotAverageFitnessForAll(testName, pop_size=POP_SIZE):
             else:
                 individual = 0
                 for value in row:
-                    averageForAll[generation][individual] += value
+                    averageForAll[generation][individual] += float(value)
                     individual += 1
                 generation += 1
 
     iterations = [[], []]
 
-    for generation in range(100):
+    for generation in range(NUM_ITERATIONS):
         for individual in range(pop_size):
             fitSum = averageForAll[generation][individual]
-            fitAvg = fitSum / 30
+            fitAvg = fitSum / NUM_EXECUTIONS
 
             iterations[0].append(generation)
             iterations[1].append(fitAvg)
 
     # plotScatter(testName, [iterations], "averageFitnessForAll")
     plotBoxplot(testName, [iterations], "averageFitnessForAll")
-    plotHist2d(testName, [iterations], "averageFitnessForAll")
+    # plotHist2d(testName, [iterations], "averageFitnessForAll")
 
 
 def plotAverageFitnessPerExecution(testName, pop_size=POP_SIZE):
@@ -164,8 +176,9 @@ def plotAverageFitnessPerExecution(testName, pop_size=POP_SIZE):
                 fitSum = 0
                 maxFit = 0
                 for value in row:
-                    fitSum += value
-                    maxFit = max(maxFit, value)
+                    fitSum += float(value)
+                    maxFit = max(maxFit, float(value))
+
                 averagePerExec[execution].append(fitSum/pop_size)
                 bestPerExec[execution].append(maxFit)
 
