@@ -3,7 +3,6 @@ package Ackley;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -15,17 +14,17 @@ public class Main {
     private static final Random rnd = new Random();
 
     public static void main(String[] args) {
-         runDefault();
+        runDefault();
         // runAlternativeFitness();
         // runAlternativeFitnessRoleta();
         // runLowerMutation();
-        //runLowerMutationRoleta();
-        //runLowerMutationRoletaSmallPopulation();
+        // runLowerMutationRoleta();
+        // runLowerMutationRoletaSmallPopulation();
     }
 
     private static void runDefault() {
-        runTest(new TestConfig("default", 10000, (int) 1e4, 0.8, 0.3, FitnessStrategy.normalStrategy,
-                StopStrategy.runAllGenerations(), SelectionStrategy.wheightedRandom));
+        runTest(new TestConfig("default", 20000, (int) 1e6, 0.9, 0.3, FitnessStrategy.normalStrategy,
+                StopStrategy.runGivenNumberOfGenerations(100), SelectionStrategy.weightedSampling));
     }
 
     private static void runAlternativeFitness() {
@@ -96,7 +95,7 @@ public class Main {
         fitnesses.add(chromosomes.stream().map(c -> c.getFitness()).collect(Collectors.toList()));
         while (!stopStrategy.finished(chromosomes, fitnessStrategy, fitnessCounter, fitnessCounterLimit,
                 numberOfGenerations)) {
-            List<Chromosome> parents = selectionStrategy.getParents(chromosomes);
+            List<Chromosome> parents = selectionStrategy.getParents(chromosomes, populationSize/2);
             List<Chromosome> children = generateChildren(parents, recombinationProbability, fitnessStrategy);
             fitnessCounter += 2;
             for (Chromosome c : chromosomes) {
@@ -107,18 +106,20 @@ public class Main {
             }
             insertChildren(chromosomes, children);
             Collections.sort(chromosomes);
+            chromosomes = chromosomes.subList(0, populationSize);
             numberOfGenerations++;
             fitnesses.add(chromosomes.stream().map(c -> c.getFitness()).collect(Collectors.toList()));
         }
+        Collections.sort(chromosomes);
+        System.out.println("----------------------");
         System.out.println(chromosomes.get(0));
-        System.out.println(chromosomes.get(0).getFitness() - chromosomes.get(1).getFitness());
+        System.out.println(chromosomes.get(populationSize/2));
+        System.out.println(chromosomes.get(populationSize-1));
         return new TestData(chromosomes, fitnesses, numberOfGenerations, fitnessStrategy);
     }
 
     private static void insertChildren(List<Chromosome> chromosomes, List<Chromosome> children) {
         Collections.sort(chromosomes);
-        chromosomes.remove(chromosomes.size() - 1);
-        chromosomes.remove(chromosomes.size() - 1);
         chromosomes.addAll(children);
     }
 
@@ -126,21 +127,30 @@ public class Main {
         List<Chromosome> population = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
             population.add(new ChromosomeArr(fitnessStrategy));
-            System.out.println(Arrays.toString(population.get(0).getRepresentation()));
+            // System.out.println(Arrays.toString(population.get(0).getRepresentation()));
         }
         return population;
     }
 
     private static List<Chromosome> generateChildren(List<Chromosome> parents, double recombinationProbability,
             FitnessStrategy fitnessStrategy) {
+        List<Chromosome> children = new ArrayList<>();
+        for(int i = 0; i < parents.size() - 1; i += 2){
+            children.addAll(procreate(parents.get(i), parents.get(i+1), recombinationProbability, fitnessStrategy));
+        }
+        return children;
+    }
+
+    private static List<Chromosome> procreate(Chromosome parent1, Chromosome parent2, double recombinationProbability,
+            FitnessStrategy fitnessStrategy) {
         int splitPos = rnd.nextInt(28) + 1;
         List<Chromosome> children = new ArrayList<>();
         if (rnd.nextDouble() < recombinationProbability) {
-            children.add(parents.get(0).cutAndCrossfill(parents.get(1), splitPos));
-            children.add(parents.get(1).cutAndCrossfill(parents.get(0), splitPos));
+            children.add(parent1.cutAndCrossfill(parent2, splitPos));
+            children.add(parent2.cutAndCrossfill(parent1, splitPos));
         } else {
-            children.add(new ChromosomeArr(parents.get(0).getRepresentation(), fitnessStrategy));
-            children.add(new ChromosomeArr(parents.get(1).getRepresentation(), fitnessStrategy));
+            children.add(new ChromosomeArr(parent1.getRepresentation(), fitnessStrategy));
+            children.add(new ChromosomeArr(parent2.getRepresentation(), fitnessStrategy));
         }
         return children;
     }

@@ -67,8 +67,8 @@ class ChromosomeArr implements Chromosome {
         for (int i = 0; i < 30; i++) {
             //if (rnd.nextDouble() < mutationProbability) {
                 //representation[i] = AckleyUtils.randomDoubleInRange(-15.0, 15.0);
-                representation[i] = AckleyUtils.randomDoubleInRange(Math.max(representation[i] - 5.0, -15.0),
-                        Math.min(representation[i] + 5.0, 15.0));
+                representation[i] = AckleyUtils.randomDoubleInRange(Math.max(representation[i] - 3.0, -15.0),
+                        Math.min(representation[i] + 3.0, 15.0));
             //}
         }
         fitness();
@@ -99,8 +99,8 @@ class ChromosomeArr implements Chromosome {
             //int pos = (i >= 29) ? 1 : 0;
             //representationString += this.representation[i] + ends[pos];
         //}
-        return String.format("\trepresentation: %s\n\tFitness: %.3f",
-                Arrays.toString(this.representation), this.fitness);
+        return String.format("\trepresentation: %s\n\tAckley: %.10f\n\tFitness: %.10f",
+                Arrays.toString(this.representation), AckleyUtils.calculateAckleyFunction(this.representation), this.fitness);
     }
 
     @Override

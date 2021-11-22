@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Random;
 
 public interface SelectionStrategy {
-    public List<Chromosome> getParents(List<Chromosome> chromosomes);
+    public List<Chromosome> getParents(List<Chromosome> chromosomes, int numberOfParents);
 
     static SelectionStrategy get2OutOf5Random = new SelectionStrategy() {
 
         @Override
-        public List<Chromosome> getParents(List<Chromosome> chromosomes) {
+        public List<Chromosome> getParents(List<Chromosome> chromosomes, int numberOfParents) {
             Random rnd = new Random();
             Collections.shuffle(chromosomes, rnd);
             List<Chromosome> randomFive = chromosomes.subList(0, 5);
@@ -23,7 +23,7 @@ public interface SelectionStrategy {
     static SelectionStrategy wheightedRandom = new SelectionStrategy() {
 
         @Override
-        public List<Chromosome> getParents(List<Chromosome> chromosomes) {
+        public List<Chromosome> getParents(List<Chromosome> chromosomes, int numberOfParents) {
             List<Double> cumulatedFitness = new ArrayList<>();
             Double fitnessSum = chromosomes.get(0).getFitness();
             cumulatedFitness.add(fitnessSum);
@@ -61,6 +61,20 @@ public interface SelectionStrategy {
                 }
             }
             return r;
+        }
+    };
+
+    static SelectionStrategy weightedSampling = new SelectionStrategy() {
+
+        @Override
+        public List<Chromosome> getParents(List<Chromosome> chromosomes, int numberOfParents) {
+            WeightedSample ws = new WeightedSample(numberOfParents);
+            for(Chromosome c : chromosomes){
+                ws.update(c);
+            }
+            List<Chromosome> parents = ws.getParents();
+            Collections.sort(parents);
+            return parents;
         }
     };
 }
