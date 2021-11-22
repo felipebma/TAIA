@@ -30,7 +30,9 @@ public class Main {
             output.createNewFile();
             FileWriter ow = new FileWriter(output, false);
             FileWriter fw = new FileWriter(fitnesses, false);
-            StringJoiner fitness = new StringJoiner("\n\n");
+            //StringJoiner fitness = new StringJoiner("\n\n");
+            fw.write("\n\n");
+
             ow.write("Best_Fitness,Generations_Count,Converged_Count");
             TestData testResults = null;
             StringJoiner sj;
@@ -43,9 +45,10 @@ public class Main {
                 for (List<Double> fit : testResults.fitnesses) {
                     sj.add(fit.toString().replace("[", "").replace("]", "").replaceAll(", ", ","));
                 }
-                fitness.add(sj.toString());
+                //fitness.add(sj.toString());
+                fw.write(sj.toString());
             }
-            fw.write(fitness.toString() + "\n");
+            fw.write(/* fitness.toString() + */ "\n");
             ow.close();
             fw.close();
         } catch (Exception e) {

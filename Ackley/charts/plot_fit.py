@@ -5,7 +5,7 @@ import csv
 import sys
 import os
 
-POP_SIZE = int(1e6)
+POP_SIZE = 20000
 
 def plotScatter(testName, iterations, plotName="plot"):
     print('scatter')
