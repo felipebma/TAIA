@@ -9,13 +9,16 @@ class AckleyUtils {
         return -15.0 + 30.0 * r.nextDouble();
     }
 
-    public static Double calculateAckleyFunction(Double[] arr) {
+    public static Double randomDoubleInRange(Double rangeMin, Double rangeMax, Random rnd) {
+        return -15.0 + 30.0 * rnd.nextDouble();
+    }
 
+    public static Double calculateAckleyFunction(Double[] arr) {
         Double n = (double) arr.length; // must be 30
         Double c1 = 20.0, c2 = 0.2, c3 = 2.0 * Math.PI;
 
         return -c1 * Math.exp(-c2 * Math.sqrt(squareSum(arr) / n))
-                - Math.exp(cosineSum(arr, c3) / n) + c1 + 1;
+                - Math.exp(cosineSum(arr, c3) / n) + c1 + 1; // exp(1)?
     }
 
     private static Double squareSum(Double[] arr) {

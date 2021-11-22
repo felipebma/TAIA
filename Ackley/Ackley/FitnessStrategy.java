@@ -9,9 +9,9 @@ public interface FitnessStrategy {
         @Override
         public Double calculateFitness(Double[] arr) {
             Double ackleyValue = AckleyUtils.calculateAckleyFunction(arr);
+            // System.out.println("ackley = " + ackleyValue);
+            // System.out.println("fitness = " + Math.exp(-ackleyValue));
             // This will never be 0, and will be 1 when ackleyValue == 0
-            //System.out.println("ackley = " + ackleyValue);
-            //System.out.println("fitness = " + Math.exp(-ackleyValue));
             return Math.exp(-ackleyValue);
         }
 
@@ -20,18 +20,5 @@ public interface FitnessStrategy {
             return 1.0;
         }
 
-    };
-
-    static FitnessStrategy alternativeStrategy = new FitnessStrategy() {
-        @Override
-        public Double calculateFitness(Double[] arr) {
-            Double ackleyValue = AckleyUtils.calculateAckleyFunction(arr);
-            return -ackleyValue; // TODO: se precisar
-        }
-
-        @Override
-        public Double maxFitness() {
-            return 10000.0;
-        }
     };
 }

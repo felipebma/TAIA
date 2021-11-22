@@ -14,7 +14,7 @@ class ChromosomeArr implements Chromosome {
         representation = new Double[30];
 
         for (int i = 0; i < 30; i++) {
-            Double randomValue = AckleyUtils.randomDoubleInRange(-15.0, 15.0);
+            Double randomValue = AckleyUtils.randomDoubleInRange(-15.0, 15.0, rnd);
             representation[i] = randomValue;
         }
         shuffle(representation);
@@ -27,28 +27,6 @@ class ChromosomeArr implements Chromosome {
         this.fitnessStrategy = fitnessStrategy;
         fitness();
     }
-
-    // @Override
-    // public Chromosome cutAndCrossfill(Chromosome other, int begin, int end) {
-    // Double[] newChild = new Double[30];
-    // Double[] otherRepresentation = other.getRepresentation();
-    //// Set<Integer> used = new HashSet<>();
-    //// for (int i = begin; i < end; i++) {
-    //// newChild[i] = this.representation[i];
-    //// used.add(newChild[i]);
-    //// }
-    //// int count = end - begin, j = end % 8;
-    //// while (count < 8) {
-    //// if (!used.contains(otherRepresentation[j])) {
-    //// newChild[(begin + count) % 8] = otherRepresentation[j];
-    //// used.add(otherRepresentation[j]);
-    //// count++;
-    //// }
-    //// j = (j + 1) % 8;
-    //// }
-
-    // return new ChromosomeArr(newChild, this.fitnessStrategy);
-    // }
 
     @Override
     public Chromosome cutAndCrossfill(Chromosome other, int splitPos) {
@@ -65,11 +43,8 @@ class ChromosomeArr implements Chromosome {
 
     public void mutation(Double mutationProbability) {
         for (int i = 0; i < 30; i++) {
-            //if (rnd.nextDouble() < mutationProbability) {
-                //representation[i] = AckleyUtils.randomDoubleInRange(-15.0, 15.0);
                 representation[i] = AckleyUtils.randomDoubleInRange(Math.max(representation[i] - 3.0, -15.0),
-                        Math.min(representation[i] + 3.0, 15.0));
-            //}
+                        Math.min(representation[i] + 3.0, 15.0), rnd);
         }
         fitness();
     }
@@ -93,12 +68,6 @@ class ChromosomeArr implements Chromosome {
 
     @Override
     public String toString() {
-        //String representationString = "";
-        //String ends[] = { ", ", "\n" };
-        //for (int i = 0; i < 30; i++) {
-            //int pos = (i >= 29) ? 1 : 0;
-            //representationString += this.representation[i] + ends[pos];
-        //}
         return String.format("\trepresentation: %s\n\tAckley: %.10f\n\tFitness: %.10f",
                 Arrays.toString(this.representation), AckleyUtils.calculateAckleyFunction(this.representation), this.fitness);
     }
