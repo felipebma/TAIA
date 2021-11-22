@@ -28,15 +28,18 @@ def plotScatter(testName, iterations, plotName="plot"):
 def plotHist2d(testName, iterations, plotName="plot"):
     print('hist2d')
     for i in range(len(iterations)):
-        x_values = iterations[i][0]
-        max_y = max(iterations[i][1])
-        y_values = [y for y in iterations[i][1]]
+        thisIteration = [[], []]
+        for j in range(len(iterations[i][0])):
+            if iterations[i][0][j] > 0:
+                thisIteration[0].append(iterations[i][0][j])
+                thisIteration[1].append(iterations[i][1][j])
+
+        x_values = thisIteration[0]
+        max_y = max(thisIteration[1])
+        y_values = [y for y in thisIteration[1]]
         plt.title("Ackley Distribution per Generation (Histogram)")
         plt.xlabel("Generation")
         plt.ylabel("Ackley")
-
-        x_values.pop(0)
-        y_values.pop(0)
 
         plt.hist2d(x_values, y_values, cmap=plt.cm.Reds,
                    bins=(len(set(x_values)), 8))
@@ -117,8 +120,8 @@ def plotFit(testName):
                 count += 1
 
     # plotScatter(testName, iterations)
-    plotBoxplot(testName, iterations)
-    # plotHist2d(testName, iterations)
+    # plotBoxplot(testName, iterations)
+    plotHist2d(testName, iterations)
 
 
 def plotAverageFitnessForAll(testName, pop_size=POP_SIZE):
@@ -154,8 +157,8 @@ def plotAverageFitnessForAll(testName, pop_size=POP_SIZE):
             iterations[1].append(fitAvg)
 
     # plotScatter(testName, [iterations], "averageFitnessForAll")
-    plotBoxplot(testName, [iterations], "averageFitnessForAll")
-    # plotHist2d(testName, [iterations], "averageFitnessForAll")
+    # plotBoxplot(testName, [iterations], "averageFitnessForAll")
+    plotHist2d(testName, [iterations], "averageFitnessForAll")
 
 
 def plotAverageFitnessPerExecution(testName, pop_size=POP_SIZE):
@@ -199,4 +202,4 @@ if not os.path.exists('{}/charts/{}/averageAndBestPerExec'.format(path, testName
 print(testName)
 plotFit(testName)
 plotAverageFitnessForAll(testName)
-plotAverageFitnessPerExecution(testName)
+# plotAverageFitnessPerExecution(testName)
