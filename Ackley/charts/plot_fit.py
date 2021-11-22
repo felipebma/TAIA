@@ -101,7 +101,7 @@ def plotFit(testName):
             else:
                 for value in row:
                     iterations[it][0].append(count)
-                    iterations[it][1].append(int(value))
+                    iterations[it][1].append(value)
                 count += 1
 
     # plotScatter(testName, iterations)
@@ -127,7 +127,7 @@ def plotAverageFitnessForAll(testName, pop_size=POP_SIZE):
             else:
                 individual = 0
                 for value in row:
-                    averageForAll[generation][individual] += int(value)
+                    averageForAll[generation][individual] += value
                     individual += 1
                 generation += 1
 
@@ -164,8 +164,8 @@ def plotAverageFitnessPerExecution(testName, pop_size=POP_SIZE):
                 fitSum = 0
                 maxFit = 0
                 for value in row:
-                    fitSum += int(value)
-                    maxFit = max(maxFit, int(value))
+                    fitSum += value
+                    maxFit = max(maxFit, value)
                 averagePerExec[execution].append(fitSum/pop_size)
                 bestPerExec[execution].append(maxFit)
 
