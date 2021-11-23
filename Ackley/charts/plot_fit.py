@@ -125,6 +125,7 @@ def plotFit(testName):
 
 
 def plotAverageFitnessForAll(testName, pop_size=POP_SIZE):
+    pop_size = 100 if testName == 'implementation1' else 20000
     averageForAll = []
 
     for generation in range(100):
@@ -162,6 +163,7 @@ def plotAverageFitnessForAll(testName, pop_size=POP_SIZE):
 
 
 def plotAverageFitnessPerExecution(testName, pop_size=POP_SIZE):
+    pop_size = 100 if testName == 'implementation1' else 20000
     averagePerExec = [[]]
     bestPerExec = [[]]
 

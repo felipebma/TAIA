@@ -14,10 +14,16 @@ public class Main {
     private static final Random rnd = new Random();
 
     public static void main(String[] args) {
+        runImplementation1();
         runDefault();
     }
 
-    private static void runDefault() {
+    private static void runImplementation1() {
+        runTest(new TestConfig("implementation1", 100, (int) 1e6, 0.9, 0.3, FitnessStrategy.normalStrategy,
+                StopStrategy.runGivenNumberOfGenerations(100), SelectionStrategy.wheightedRandom));
+	}
+
+	private static void runDefault() {
         runTest(new TestConfig("default", 20000, (int) 1e6, 0.9, 0.3, FitnessStrategy.normalStrategy,
                 StopStrategy.runGivenNumberOfGenerations(100), SelectionStrategy.weightedSampling));
     }
