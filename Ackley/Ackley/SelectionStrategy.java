@@ -8,18 +8,6 @@ import java.util.Random;
 public interface SelectionStrategy {
     public List<Chromosome> getParents(List<Chromosome> chromosomes, int numberOfParents);
 
-    static SelectionStrategy get2OutOf5Random = new SelectionStrategy() {
-
-        @Override
-        public List<Chromosome> getParents(List<Chromosome> chromosomes, int numberOfParents) {
-            Random rnd = new Random();
-            Collections.shuffle(chromosomes, rnd);
-            List<Chromosome> randomFive = chromosomes.subList(0, 5);
-            Collections.sort(randomFive);
-            return randomFive.subList(0, 2);
-        }
-    };
-
     static SelectionStrategy wheightedRandom = new SelectionStrategy() {
 
         @Override
@@ -69,7 +57,7 @@ public interface SelectionStrategy {
         @Override
         public List<Chromosome> getParents(List<Chromosome> chromosomes, int numberOfParents) {
             WeightedSample ws = new WeightedSample(numberOfParents);
-            for(Chromosome c : chromosomes){
+            for (Chromosome c : chromosomes) {
                 ws.update(c);
             }
             List<Chromosome> parents = ws.getParents();

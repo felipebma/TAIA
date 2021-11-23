@@ -14,17 +14,23 @@ public class Main {
     private static final Random rnd = new Random();
 
     public static void main(String[] args) {
+        runImplementation0();
         runImplementation1();
         runDefault();
+    }
+
+    private static void runImplementation0() {
+        runTest(new TestConfig("implementation0", 20, (int) 1e4, 0.9, 0.1, FitnessStrategy.normalStrategy,
+                StopStrategy.runAllGenerations(), SelectionStrategy.wheightedRandom));
     }
 
     private static void runImplementation1() {
         runTest(new TestConfig("implementation1", 100, (int) 1e6, 0.9, 0.3, FitnessStrategy.normalStrategy,
                 StopStrategy.runGivenNumberOfGenerations(100), SelectionStrategy.wheightedRandom));
-	}
+    }
 
-	private static void runDefault() {
-        runTest(new TestConfig("default", 20000, (int) 1e6, 0.9, 0.3, FitnessStrategy.normalStrategy,
+    private static void runDefault() {
+        runTest(new TestConfig("implementation2", 20000, (int) 1e6, 0.9, 0.3, FitnessStrategy.normalStrategy,
                 StopStrategy.runGivenNumberOfGenerations(100), SelectionStrategy.weightedSampling));
     }
 
@@ -67,7 +73,8 @@ public class Main {
         Collections.sort(chromosomes);
         int numberOfGenerations = 1;
         List<List<Double>> fitnesses = new ArrayList<>();
-        fitnesses.add(chromosomes.stream().map(c -> c.getFitness()).collect(Collectors.toList()));
+        fitnesses.add(chromosomes.stream().map(c -> AckleyUtils.calculateAckleyFunction(c.getRepresentation()))
+                .collect(Collectors.toList()));
 
         List<Chromosome> parents, children;
         while (!stopStrategy.finished(chromosomes, fitnessStrategy, fitnessCounter, fitnessCounterLimit,

@@ -9,8 +9,6 @@ public interface FitnessStrategy {
         @Override
         public Double calculateFitness(Double[] arr) {
             Double ackleyValue = AckleyUtils.calculateAckleyFunction(arr);
-            // System.out.println("ackley = " + ackleyValue);
-            // System.out.println("fitness = " + Math.exp(-ackleyValue));
             // This will never be 0, and will be 1 when ackleyValue == 0
             return Math.exp(-ackleyValue);
         }

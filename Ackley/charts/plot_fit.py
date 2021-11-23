@@ -9,14 +9,19 @@ POP_SIZE = 20000
 NUM_ITERATIONS = 100
 NUM_EXECUTIONS = 10
 
+def getPopSize(testName):
+    s = {'implementation0': 20,
+        'implementation1': 100,
+        'implementation2': 20000}
+    return s[testName]
 
 def plotScatter(testName, iterations, plotName="plot"):
     print('scatter')
     for i in range(len(iterations)):
         fig, ax = plt.subplots()
-        plt.title("Fitness Distribution per Generation (Scatter)")
+        plt.title("Ackley Distribution per Generation (Scatter)")
         plt.xlabel("Generation")
-        plt.ylabel("Fitness")
+        plt.ylabel("Ackley")
         x_values = iterations[i][0]
         y_values = iterations[i][1]
         ax.scatter(x_values, y_values)
@@ -80,9 +85,9 @@ def plotAvgAndBestLines(testName, avgPerExec, bestPerExec):
     print('avg and best per execution')
 
     for exectution in range(10):
-        plt.title("Average and Best Fitness x Generation")
+        plt.title("Average and Best Ackley x Generation")
         plt.xlabel("Generation")
-        plt.ylabel("Fitness")
+        plt.ylabel("Ackley")
 
         avgFitness = avgPerExec[exectution]
         maxFitness = bestPerExec[exectution]
@@ -125,7 +130,7 @@ def plotFit(testName):
 
 
 def plotAverageFitnessForAll(testName, pop_size=POP_SIZE):
-    pop_size = 100 if testName == 'implementation1' else 20000
+    pop_size = getPopSize(testName)
     averageForAll = []
 
     for generation in range(100):
@@ -163,7 +168,7 @@ def plotAverageFitnessForAll(testName, pop_size=POP_SIZE):
 
 
 def plotAverageFitnessPerExecution(testName, pop_size=POP_SIZE):
-    pop_size = 100 if testName == 'implementation1' else 20000
+    pop_size = getPopSize(testName)
     averagePerExec = [[]]
     bestPerExec = [[]]
 
@@ -179,10 +184,10 @@ def plotAverageFitnessPerExecution(testName, pop_size=POP_SIZE):
                 bestPerExec.append([])
             else:
                 fitSum = 0
-                maxFit = 0
+                maxFit = 30000
                 for value in row:
                     fitSum += float(value)
-                    maxFit = max(maxFit, float(value))
+                    maxFit = min(maxFit, float(value))
 
                 averagePerExec[execution].append(fitSum/pop_size)
                 bestPerExec[execution].append(maxFit)
