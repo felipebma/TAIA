@@ -3,7 +3,6 @@ package Ackley;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public interface SelectionStrategy {
     public List<Chromosome> getParents(List<Chromosome> chromosomes, int numberOfParents);

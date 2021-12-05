@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Haberman {
+public class Cancer {
 
     static Scanner in = new Scanner(System.in);
-    static int maxIterations = 100000;
+    static int maxIterations = 1500;
     static int numberOfSalps = 50;
-    static int inputSize = 3;
-    static int hiddenSize = 4;
+    static int inputSize = 9;
+    static int hiddenSize = 8;
     static int outputSize = 2;
 
     public static void main(String[] args) {
@@ -71,10 +71,10 @@ public class Haberman {
             String[] line = in.nextLine().split(",");
             List<Double> input = new ArrayList<>();
             List<Double> output = new ArrayList<>(Arrays.asList(0.0, 0.0));
-            for (int i = 0; i < 3; i++) {
-                input.add(Double.parseDouble(line[i]));
+            for (int i = 1; i < 10; i++) {
+                input.add(line[i].equals("?") ? 0 : Double.parseDouble(line[i]));
             }
-            output.set(Integer.parseInt(line[3]) - 1, 1.0);
+            output.set((Integer.parseInt(line[10]) - 2) / 2, 1.0);
             data.add(new Data(input, output));
         }
         return data;

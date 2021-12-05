@@ -7,6 +7,10 @@ delete-bin:
 run: delete-bin
 	javac -d bin SalpSwarm/Haberman.java && cd bin && java SalpSwarm.Haberman < ../data/haberman.data
 
+.SILENT:
+cancer: delete-bin
+	javac -d bin SalpSwarm/Cancer.java && cd bin && java SalpSwarm.Cancer < ../data/cancer.data
+
 
 plot: $(DATA_DIR)/*_fit.csv
 	cd charts && \
