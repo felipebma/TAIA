@@ -4,7 +4,7 @@ delete-bin:
 	rm -rf bin
 
 .SILENT:
-run: delete-bin
+haberman: delete-bin
 	javac -d bin SalpSwarm/Haberman.java && cd bin && java SalpSwarm.Haberman < ../data/haberman.data
 
 .SILENT:
