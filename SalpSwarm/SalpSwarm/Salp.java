@@ -77,7 +77,7 @@ public class Salp {
     }
 
     private void updateValuesList(int currIteration, int maxIteration, List<Double> listA, List<Double> listB) {
-        double c1 = 2 * Math.exp(-1 * Math.pow((4.0 * currIteration) / maxIteration, 2));
+        double c1 = 2 * Math.exp(-1.0 * Math.pow((4.0 * currIteration) / maxIteration, 2));
         for (int i = 0; i < listA.size(); i++) {
             if (this.isLeader) {
                 double c2 = rnd.nextDouble(), c3 = rnd.nextDouble();
@@ -87,10 +87,28 @@ public class Salp {
                 listA.set(i, (listA.get(i) + listB.get(i)) / 2);
             }
         }
-
     }
 
     public void isLeader() {
         this.isLeader = true;
     }
+
+	public void fixDimensions() {
+        for(int i = 0; i < hiddenBias.size(); i++){
+            hiddenBias.set(i, Math.max(min, Math.min(max, hiddenBias.get(i))));
+        }
+        for(int i = 0; i < hiddenWeights.size(); i++){
+            for(int j = 0; j < hiddenWeights.get(i).size(); j++){
+                hiddenWeights.get(i).set(j, Math.max(min, Math.min(max, hiddenWeights.get(i).get(j))));
+            }
+        }
+        for(int i = 0; i < outputBias.size(); i++){
+            outputBias.set(i, Math.max(min, Math.min(max, outputBias.get(i))));
+        }
+        for(int i = 0; i < outputWeights.size(); i++){
+            for(int j = 0; j < outputWeights.get(i).size(); j++){
+                outputWeights.get(i).set(j, Math.max(min, Math.min(max, outputWeights.get(i).get(j))));
+            }
+        }
+	}
 }

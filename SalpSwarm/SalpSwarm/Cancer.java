@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Cancer {
 
     static Scanner in = new Scanner(System.in);
-    static int maxIterations = 1500;
+    static int maxIterations = 10000;
     static int numberOfSalps = 50;
     static int inputSize = 9;
     static int hiddenSize = 8;
@@ -19,14 +19,14 @@ public class Cancer {
     public static void main(String[] args) {
         List<Data> data = getData();
         Collections.shuffle(data, new Random());
-        int cutPosition = (int) 0.8 * data.size();
+        int cutPosition = (int) (0.8 * data.size());
         List<Data> trainData = data.subList(0, cutPosition);
         List<Data> testData = data.subList(cutPosition, data.size());
         List<Salp> salps = new ArrayList<>();
         double bestFitness = Integer.MAX_VALUE;
         Salp bestSalp = null;
         for (int i = 0; i < numberOfSalps; i++) {
-            salps.add(new Salp(inputSize, hiddenSize, outputSize, 0, 1));
+            salps.add(new Salp(inputSize, hiddenSize, outputSize, -1, 1));
             double fitness = salps.get(i).fitness(trainData);
             if (fitness < bestFitness) {
                 bestFitness = fitness;
@@ -45,6 +45,10 @@ public class Cancer {
                     bestSalp = salps.get(j);
                 }
             }
+            for(Salp salp : salps){
+                salp.fixDimensions();
+            }
+            System.out.println("best fitness: " + bestFitness);
         }
         NeuralNetwork nn = bestSalp.getNeuralNetwork();
         double correct = 0.0;

@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Haberman {
 
     static Scanner in = new Scanner(System.in);
-    static int maxIterations = 100000;
+    static int maxIterations = 10000;
     static int numberOfSalps = 50;
     static int inputSize = 3;
     static int hiddenSize = 4;
@@ -19,14 +19,14 @@ public class Haberman {
     public static void main(String[] args) {
         List<Data> data = getData();
         Collections.shuffle(data, new Random());
-        int cutPosition = (int) 0.8 * data.size();
+        int cutPosition = (int) (0.8 * data.size());
         List<Data> trainData = data.subList(0, cutPosition);
         List<Data> testData = data.subList(cutPosition, data.size());
         List<Salp> salps = new ArrayList<>();
         double bestFitness = Integer.MAX_VALUE;
         Salp bestSalp = null;
         for (int i = 0; i < numberOfSalps; i++) {
-            salps.add(new Salp(inputSize, hiddenSize, outputSize, 0, 1));
+            salps.add(new Salp(inputSize, hiddenSize, outputSize, -1, 1));
             double fitness = salps.get(i).fitness(trainData);
             if (fitness < bestFitness) {
                 bestFitness = fitness;
@@ -45,6 +45,10 @@ public class Haberman {
                     bestSalp = salps.get(j);
                 }
             }
+            for(Salp salp : salps){
+                salp.fixDimensions();
+            }
+            System.out.println("best fitness: " + bestFitness);
         }
         NeuralNetwork nn = bestSalp.getNeuralNetwork();
         double correct = 0.0;
@@ -71,7 +75,7 @@ public class Haberman {
             String[] line = in.nextLine().split(",");
             List<Double> input = new ArrayList<>();
             List<Double> output = new ArrayList<>(Arrays.asList(0.0, 0.0));
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < inputSize; i++) {
                 input.add(Double.parseDouble(line[i]));
             }
             output.set(Integer.parseInt(line[3]) - 1, 1.0);
