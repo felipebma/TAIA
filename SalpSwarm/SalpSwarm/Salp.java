@@ -77,7 +77,7 @@ public class Salp {
     }
 
     private void updateValuesList(int currIteration, int maxIteration, List<Double> listA, List<Double> listB) {
-        double c1 = 2 * Math.pow(Math.exp(1), -1 * Math.pow((4.0 * currIteration) / maxIteration, 2));
+        double c1 = 2 * Math.exp(-1 * Math.pow((4.0 * currIteration) / maxIteration, 2));
         for (int i = 0; i < listA.size(); i++) {
             if (this.isLeader) {
                 double c2 = rnd.nextDouble(), c3 = rnd.nextDouble();
