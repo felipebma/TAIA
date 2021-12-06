@@ -21,6 +21,9 @@ public class Cancer extends ExecutionDetails {
     }
 
     public List<Data> getData() {
+        if (this.data != null) {
+            return this.data;
+        }
         List<Data> data = new ArrayList<>();
         while (in.hasNextLine()) {
             String[] line = in.nextLine().split(",");
@@ -32,6 +35,12 @@ public class Cancer extends ExecutionDetails {
             output.set((Integer.parseInt(line[10]) - 2) / 2, 1.0);
             data.add(new Data(input, output));
         }
+        this.data = data;
         return data;
     }
+
+	@Override
+	public String toString() {
+		return "Cancer";
+	}
 }

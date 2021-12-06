@@ -16,11 +16,21 @@ public class Main {
     static int outputSize;
 
     public static void main(String[] args) {
-        run(new Haberman());
-        run(new Cancer());
+        // run20(new Haberman());
+        run20(new Cancer());
     }
 
-    private static void run(ExecutionDetails details) {
+    public static void run20(ExecutionDetails details) {
+        Double accuracySum = 0.0;
+        for (int i = 0; i < 20; i++) {
+            System.out.print(i + "-");
+            accuracySum += run(details);
+        }
+        System.out.println(details.toString());
+        System.out.println("accuracy mean: " + accuracySum / 20.0);
+    }
+
+    private static Double run(ExecutionDetails details) {
         List<Data> data = details.getData();
         inputSize = details.inputSize;
         hiddenSize = details.hiddenSize;
@@ -72,9 +82,9 @@ public class Main {
                 correct++;
             }
         }
-        System.out.println("correct: " + correct);
-        System.out.println("total: " + testData.size());
+        // System.out.println("correct: " + correct);
+        // System.out.println("total: " + testData.size());
         System.out.println("accuracy: " + correct / testData.size());
-
+        return correct / testData.size();
     }
 }

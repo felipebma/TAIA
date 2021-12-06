@@ -21,6 +21,9 @@ public class Haberman extends ExecutionDetails {
     }
 
     public List<Data> getData() {
+        if (this.data != null) {
+            return this.data;
+        }
         List<Data> data = new ArrayList<>();
         while (in.hasNextLine()) {
             String[] line = in.nextLine().split(",");
@@ -35,4 +38,9 @@ public class Haberman extends ExecutionDetails {
         this.data = data;
         return data;
     }
+
+	@Override
+	public String toString() {
+		return "Haberman";
+	}
 }
