@@ -17,7 +17,8 @@ public class Main {
 
     public static void main(String[] args) {
         // run20(new Haberman());
-        run20(new Cancer());
+        //run20(new Cancer());
+        run20(new Liver());
     }
 
     public static void run20(ExecutionDetails details) {
