@@ -1,7 +1,6 @@
 package SalpSwarm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -41,6 +40,7 @@ public class Main {
                 bestSalp = salps.get(i);
             }
         }
+        salps.get(0).isLeader();
         for (int i = 0; i < maxIterations; i++) {
             salps.get(0).follow(bestSalp, i, maxIterations);
             bestFitness = salps.get(0).fitness(trainData);
