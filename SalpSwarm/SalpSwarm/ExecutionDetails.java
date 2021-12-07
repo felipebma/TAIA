@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public abstract class ExecutionDetails {
 
-    Scanner in;
+    protected Scanner in;
     int inputSize, hiddenSize, outputSize;
     List<Data> data;
 
