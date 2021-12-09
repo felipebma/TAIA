@@ -72,7 +72,9 @@ def plotAverageFitnessForAll(testName):
         for row in csv_reader:
             iterations.append([])
             for value in row:
-                iterations[len(iterations)-1].append(min(1e5, float(value)))
+                if float(value) < 1e6:
+                    iterations[len(iterations) -
+                               1].append(min(1e6, float(value)))
 
     plotHist2d(testName, iterations, "averageFitnessForAll")
     plotLine(testName, iterations, "averageFitnessForAll")
