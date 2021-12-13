@@ -35,7 +35,7 @@ def plotHist2d(testName, iterations, plotName="plot"):
     plt.ylabel("Fitness")
 
     plt.hist2d(x_values, y_values, cmap=plt.cm.Blues,
-               bins=(len(set(x_values)), 10))
+               bins=(len(set(x_values)), 20))
     plt.colorbar()
     plt.savefig('{}/hist2d/{}{}.png'.format(testName, plotName, 0))
     plt.close()
@@ -72,9 +72,7 @@ def plotAverageFitnessForAll(testName):
         for row in csv_reader:
             iterations.append([])
             for value in row:
-                if float(value) < 1e6:
-                    iterations[len(iterations) -
-                               1].append(min(1e6, float(value)))
+                iterations[len(iterations) - 1].append(float(value))
 
     plotHist2d(testName, iterations, "averageFitnessForAll")
     plotLine(testName, iterations, "averageFitnessForAll")

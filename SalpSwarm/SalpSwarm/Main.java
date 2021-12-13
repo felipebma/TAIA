@@ -21,7 +21,7 @@ public class Main {
     static int outputSize;
 
     public static void main(String[] args) {
-        // run20(new Haberman());
+        run20(new Haberman());
         run20(new Cancer());
         // run20(new Liver());
         run20(new Thyroid());
@@ -100,12 +100,28 @@ public class Main {
             List<Double> fitnesses = new ArrayList<>();
             salps.get(0).follow(bestSalp, i, maxIterations);
             bestFitness = salps.get(0).fitness(trainData);
-            fitnesses.add(bestFitness);
+
+            NeuralNetwork nn = bestSalp.getNeuralNetwork();
+            double correct = 0.0;
+            for (Data test : testData) {
+                List<Double> result = nn.process(test.input);
+                int r = 0;
+                for (int j = 1; j < result.size(); j++) {
+                    if (result.get(j) > result.get(r)) {
+                        r = j;
+                    }
+                }
+                if (test.output.get(r) == 1) {
+                    correct++;
+                }
+            }
+            double bestAccuracy = correct / testData.size();
+
+            fitnesses.add(bestAccuracy);
             bestSalp = salps.get(0);
             for (int j = 1; j < salps.size(); j++) {
                 salps.get(j).follow(salps.get(j - 1), i, maxIterations);
                 double fitness = salps.get(j).fitness(trainData);
-                fitnesses.add(fitness);
                 if (fitness < bestFitness) {
                     bestFitness = fitness;
                     bestSalp = salps.get(j);
