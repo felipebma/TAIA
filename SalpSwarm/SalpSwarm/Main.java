@@ -21,10 +21,10 @@ public class Main {
     static int outputSize;
 
     public static void main(String[] args) {
-        run20(new Haberman());
+        // run20(new Haberman());
         run20(new Cancer());
         // run20(new Liver());
-        run20(new Thyroid());
+        // run20(new Thyroid());
     }
 
     // public static void run20(ExecutionDetails details) {

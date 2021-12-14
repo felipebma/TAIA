@@ -6,21 +6,6 @@ import sys
 import os
 
 
-def plotScatter(testName, iterations, plotName="plot"):
-    print('scatter')
-    for i in range(len(iterations)):
-        fig, ax = plt.subplots()
-        plt.title("Ackley Distribution per Generation (Scatter)")
-        plt.xlabel("Generation")
-        plt.ylabel("Ackley")
-        x_values = iterations[i][0]
-        y_values = iterations[i][1]
-        ax.scatter(x_values, y_values)
-        ax.set_xticks(x_values)
-        plt.savefig('{}/scatter/{}{}.png'.format(testName, plotName, i))
-        plt.close()
-
-
 def plotHist2d(testName, iterations, plotName="plot"):
     print('hist2d')
 
@@ -30,9 +15,9 @@ def plotHist2d(testName, iterations, plotName="plot"):
         for value in iterations[it]:
             x_values.append(it)
             y_values.append(value)
-    plt.title("Salm Fitness Distribution per Iteration (Histogram)")
+    plt.title("Leader Salp Accuracy Distribution per Iteration")
     plt.xlabel("Iteration")
-    plt.ylabel("Fitness")
+    plt.ylabel("Accuracy")
 
     plt.hist2d(x_values, y_values, cmap=plt.cm.Blues,
                bins=(len(set(x_values)), 20))
@@ -53,9 +38,9 @@ def plotLine(testName, iterations, plotName="plot"):
         y_values.append(sum(iterations[it])/len(iterations[it]))
         best_values.append(min(iterations[it]))
         worst_values.append(max(iterations[it]))
-    plt.title("Salp Average Fitness per Iteration")
+    plt.title("Leader Salp Average Accuracy per Iteration")
     plt.xlabel("Iteration")
-    plt.ylabel("Fitness")
+    plt.ylabel("Accuracy")
 
     plt.plot(x_values, y_values)
     # plt.plot(x_values, best_values)
